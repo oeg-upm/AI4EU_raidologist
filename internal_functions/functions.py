@@ -89,18 +89,14 @@ def _get_neural_embedding(image_file, roi=None):
     """Generates a feature vector for a given image using a pretrained convolutional neural network (ResNet18)
     INPUT: Image file, [Coordinates of ROI in a list [x,y,w,h]]
     OUTPUT: Feature vector of the image"""
-    ##Genera vectores de salida de dimension 1000
-    # Cargamos el modelo
     cnn_model = models.resnet18(pretrained=True)
     # Feature layer
     layer = cnn_model._modules.get('avgpool')
     cnn_model.eval()
-    # Definimos el transformador para adaptar la imagen a la red
     scaler = transforms.Resize((224, 224))
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     to_tensor = transforms.ToTensor()
-    # Cargamos la imagen
     extension = image_file.rstrip().split('.')[-1]
     if extension == 'dcm':
         if extension == 'dcm':
@@ -120,18 +116,13 @@ def _get_neural_embedding(image_file, roi=None):
         img = Image.open(image_file)
         if roi:
             img = img.crop(roi)
-    # Convertimos la imagen a una variable de Pytorch
     pytorch_img = Variable(normalize(to_tensor(scaler(img))).unsqueeze(0))
-    # Creamos un vector vacio para guardar el embedding
     feature_vector = t.zeros(512)
 
-    # Creaos una funcion para copiar los datos de una capa de salida a un vector
     def copy_vector(m, i, o):
         feature_vector.copy_(o.data.squeeze())
 
-    # Asociamos la funcion a nuestra capa de salida
     h = layer.register_forward_hook(copy_vector)
-    # Ejecutamos el modelo
     cnn_model(pytorch_img)
     return np.array(feature_vector.data)
 
@@ -201,45 +192,33 @@ def train_section_model(case_folder, params=None):
     train_data, valid_data = training_data.split(split_ratio=0.15, random_state=random.seed(2020))
     TEXT.build_vocab(training_data, min_freq=1, vectors="glove.6B.100d")
     LABEL.build_vocab(training_data)
-    # check whether cuda is available
     device = t.device('cuda' if t.cuda.is_available() else 'cpu')
-    # set batch size
     BATCH_SIZE = 32
-
-    # Load an iterator
     train_iterator, valid_iterator = data.BucketIterator.splits(
         (train_data, valid_data),
         batch_size=BATCH_SIZE,
         sort_key=lambda x: len(x.text),
         sort_within_batch=True,
         device=device)
-    # define hyperparameters
     size_of_vocab = len(TEXT.vocab)
     params['size_of_vocab'] = size_of_vocab
-    # instantiate the model
     model = internal_functions.classifier(size_of_vocab, params['embedding_dim'], params['num_hidden_nodes'],
                                           params['num_output_nodes'],
                                           params['num_layers'], bidirectional=params['bidirection'],
                                           dropout=params['dropout'])
 
-    # Initialize the pretrained embedding
     pretrained_embeddings = TEXT.vocab.vectors
     model.embedding.weight.data.copy_(pretrained_embeddings)
     model, optimizer, criterion = internal_functions.optimizer_and_loss(model, device)
 
-    # Now, we train the model
     N_EPOCHS = 10
     best_valid_loss = float('inf')
 
     for epoch in range(N_EPOCHS):
-
-        # train the model
         model, train_loss, train_acc = internal_functions.train(model, train_iterator, optimizer, criterion)
 
-        # evaluate the model
         valid_loss, valid_acc = internal_functions.evaluate(model, valid_iterator, criterion)
 
-        # save the best model
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
             _save_obj({'params': params, 'model': model.state_dict(), 'vocab_dict': TEXT.vocab.stoi,
@@ -329,7 +308,6 @@ def get_abbr_ratio(text, known_abbreviatures=None):
     abbreviation_pipe = AbbreviationDetector(nlp)
     nlp.add_pipe(abbreviation_pipe)
     doc = nlp(text)
-    # Esto tiene que haber una manera mas elegante
     tokens = list(set([t.text for t in doc if t.text not in string.punctuation]))
     abbrs = [d.text for d in doc._.abbreviations]
     if len(abbrs) == 0:
