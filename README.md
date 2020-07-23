@@ -5,8 +5,7 @@ It is devised as a Case-Based Reasoning model, powered by several deep learning 
 
 While CBR is integrated as a continuous cycle, its subparts are designed to be fully modular, thus can be easily substituted to fit new data. The following diagram provides an overview on the system. Modular elements are represented by bricks, implying that they can be replaced by different models as long as they meet the same objective. 
 
-[[https://i.ibb.co/7Y4ZyhR/Global-Diagram.png|width=300px]]
-![Overview of the proposed framework]()  
+<img src="https://i.ibb.co/7Y4ZyhR/Global-Diagram.png" width=50% height=50%>
 
 ### 🧱**Module specification**
 The implementations of the different modules are contained in the *functions.py* file from the internal_functions folder. By default, the following models are employed for each of the denoted modules:
