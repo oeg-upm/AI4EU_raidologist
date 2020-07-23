@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>internal_functions.functions API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>internal_functions.functions</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import datetime
+import os
+import pickle
+import random
+import re
+import string
+import xml.etree.ElementTree as ET
+import cv2
+import numpy as np
+import spacy
+import torch as t
+import torchvision.models as models
+import torchvision.transforms as transforms
+from PIL import Image
+from imageio import imread
+from scispacy.abbreviation import AbbreviationDetector
+from torch.autograd import Variable
+from torchtext import data
+import sys
+from urllib.request import urlopen
+from urllib.parse import quote
+import json
+import pydicom
+import shutil
+from pydicom.pixel_data_handlers.util import apply_color_lut
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+import pandas as pd
+
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+import internal_functions
+
+
+def _save_obj(obj, name):
+    with open(name + &#39;.pkl&#39;, &#39;wb&#39;) as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+
+def _load_obj(name):
+    with open(name + &#39;.pkl&#39;, &#39;rb&#39;) as f:
+        return pickle.load(f)
+
+
+##INDICATOR 1: Image Processing
+def _get_kaze_vector(image_file, roi=None):
+    &#34;&#34;&#34;Generates a feature vector for the image using the KAZE keypoint detection method.
+     INPUT: Image file, [Coordinates of ROI in a list [x,y,w,h]]
+     OUTPUT: Descriptor vector&#34;&#34;&#34;
+    # Check the extension of the image file
+    extension = image_file.rstrip().split(&#39;.&#39;)[-1]
+    if extension == &#39;dcm&#39;:
+        dicom_image = pydicom.dcmread(image_file)
+        arr = dicom_image.pixel_array
+        rgb_image = apply_color_lut(arr, dicom_image, palette=&#39;PET&#39;)
+        gray = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2GRAY)
+        scale_percent = 60  # percent of original size
+        width = int(gray.shape[1] * scale_percent / 100)
+        height = int(gray.shape[0] * scale_percent / 100)
+        dim = (width, height)
+        gray = cv2.resize(gray, dim, interpolation=cv2.INTER_AREA)
+
+    else:
+        image = imread(image_file)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if roi:
+        gray = gray[int(roi[1]):int(roi[1] + roi[3]), int(roi[0]):int(roi[0] + roi[2])]
+    alg = cv2.KAZE_create()
+    kps = alg.detect(gray)
+    kps = sorted(kps, key=lambda x: -x.response)[:128]
+    kps, dsc = alg.compute(gray, kps)
+    if dsc is None:
+        return kps, np.zeros((512,))
+    dsc = dsc.flatten()
+    if dsc.size &lt; 512:
+        # if we have less the 32 descriptors then just adding zeros at the
+        # end of our feature vector
+        dsc = np.concatenate([dsc, np.zeros(512 - dsc.size)])
+    elif dsc.size &gt; 512:
+        n = 64
+        while dsc.size &gt; 512:
+            n = int(n / 2)
+            kps = sorted(kps, key=lambda x: -x.response)[:n]
+            kps, dsc = alg.compute(gray, kps)
+            dsc = dsc.flatten()
+    return dsc
+
+
+def _get_neural_embedding(image_file, roi=None):
+    &#34;&#34;&#34;Generates a feature vector for a given image using a pretrained convolutional neural network (ResNet18)
+    INPUT: Image file, [Coordinates of ROI in a list [x,y,w,h]]
+    OUTPUT: Feature vector of the image&#34;&#34;&#34;
+    ##Genera vectores de salida de dimension 1000
+    # Cargamos el modelo
+    cnn_model = models.resnet18(pretrained=True)
+    # Feature layer
+    layer = cnn_model._modules.get(&#39;avgpool&#39;)
+    cnn_model.eval()
+    # Definimos el transformador para adaptar la imagen a la red
+    scaler = transforms.Resize((224, 224))
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
+    to_tensor = transforms.ToTensor()
+    # Cargamos la imagen
+    extension = image_file.rstrip().split(&#39;.&#39;)[-1]
+    if extension == &#39;dcm&#39;:
+        if extension == &#39;dcm&#39;:
+            dicom_image = pydicom.dcmread(image_file)
+            arr = dicom_image.pixel_array
+            img = apply_color_lut(arr, dicom_image, palette=&#39;PET&#39;)
+        if roi:
+            img = img[int(roi[1]):int(roi[1] + roi[3]), int(roi[0]):int(roi[0] + roi[2])]
+        scale_percent = 60  # percent of original size
+        width = int(img.shape[1] * scale_percent / 100)
+        height = int(img.shape[0] * scale_percent / 100)
+        dim = (width, height)
+        # resize image
+        img_array = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+        img = Image.fromarray(img_array)
+    else:
+        img = Image.open(image_file)
+        if roi:
+            img = img.crop(roi)
+    # Convertimos la imagen a una variable de Pytorch
+    pytorch_img = Variable(normalize(to_tensor(scaler(img))).unsqueeze(0))
+    # Creamos un vector vacio para guardar el embedding
+    feature_vector = t.zeros(512)
+
+    # Creaos una funcion para copiar los datos de una capa de salida a un vector
+    def copy_vector(m, i, o):
+        feature_vector.copy_(o.data.squeeze())
+
+    # Asociamos la funcion a nuestra capa de salida
+    h = layer.register_forward_hook(copy_vector)
+    # Ejecutamos el modelo
+    cnn_model(pytorch_img)
+    return np.array(feature_vector.data)
+
+
+def _query_SNOMED(term, i=0, query_type=&#39;concept&#39;):
+    baseUrl = &#39;https://browser.ihtsdotools.org/snowstorm/snomed-ct&#39;
+    edition = &#39;MAIN&#39;
+    version = &#39;2020-03-09&#39;
+    equivalence_cliner_dict = {&#39;disease&#39;: &#39;problem&#39;, &#39;procedure&#39;: &#39;test&#39;, &#39;substance&#39;: &#39;treatment&#39;}
+    ret = &#39;N/A&#39;
+    if query_type == &#39;concept&#39;:
+        url = baseUrl + &#39;/browser/&#39; + edition + &#39;/&#39; + version + &#39;/descriptions?&amp;limit=50&amp;term=&#39; + quote(term) \
+              + &#39;&amp;conceptActive=true&amp;lang=english&amp;skipTo=0&amp;returnLimit=100&#39;
+        try:
+            response = urlopen(url).read()
+            snomed_data = json.loads(response.decode(&#39;utf-8&#39;))
+            if snomed_data[&#39;totalElements&#39;] &gt;= 1:
+                ret = snomed_data[&#39;items&#39;][i][&#39;concept&#39;][&#39;fsn&#39;][&#39;term&#39;]
+        except:
+            pass
+    elif query_type == &#39;entity_type&#39;:
+        url = baseUrl + &#39;/browser/&#39; + edition + &#39;/&#39; + version + &#39;/descriptions?&amp;limit=50&amp;term=&#39; + quote(term) \
+              + &#39;&amp;conceptActive=true&amp;lang=english&amp;skipTo=0&amp;returnLimit=100&#39;
+        try:
+            response = urlopen(url).read()
+            snomed_data = json.loads(response.decode(&#39;utf-8&#39;))
+            if snomed_data[&#39;totalElements&#39;] &gt;= 1:
+                s = snomed_data[&#39;items&#39;][i][&#39;concept&#39;][&#39;fsn&#39;][&#39;term&#39;]
+                ret = s[s.find(&#34;(&#34;) + 1:s.find(&#34;)&#34;)]
+                if ret in equivalence_cliner_dict.keys():
+                    ret = equivalence_cliner_dict[ret]
+        except:
+            pass
+    return ret
+
+
+#######FUNCTIONS FOR MODEL TRAINING
+def _prepare_data(folder):
+    &#34;&#34;&#34;Parses the input files (from a given format) into a CSV file
+    INPUT: Folder containing the input files, [Format. Default is XML]&#34;&#34;&#34;
+    w = open(&#39;externals/tmp/dataset.csv&#39;, &#39;w+&#39;)
+    w.write(&#39;text,label,\n&#39;)
+    for filename in os.listdir(folder):
+        name = filename.split(&#39;.&#39;)[0]
+        case = _load_obj(os.path.join(folder, name))
+        report = case.get_solution().get_section_report()
+        labeled_report = section_string_to_dict(report.rstrip().split(&#39;\n&#39;))
+        for k, v in labeled_report.items():
+            if len(v) &gt; 0:
+                w.write(&#34;\&#34;&#34; + v + &#39;\&#34;,&#39; + k + &#39;,\n&#39;)
+    w.close()
+
+
+def train_section_model(case_folder, params=None):
+    &#34;&#34;&#34;Trains a section formatting model. If no specific parameters are specified, the best identified values are used.
+    OUTPUT: Trained model, text vocabulary and label vocabulary&#34;&#34;&#34;
+    _prepare_data(case_folder)
+    if params is None:
+        params = {&#39;embedding_dim&#39;: 100, &#39;num_hidden_nodes&#39;: 32, &#39;num_output_nodes&#39;: 5, &#39;bidirection&#39;: True,
+                  &#39;num_layers&#39;: 2, &#39;dropout&#39;: 0.2}
+    t.backends.cudnn.deterministic = True
+    TEXT = data.Field(tokenize=&#39;spacy&#39;, batch_first=True, include_lengths=True)
+    LABEL = data.LabelField(dtype=t.long, batch_first=True)
+    fields = [(&#39;text&#39;, TEXT), (&#39;label&#39;, LABEL)]
+    training_data = data.TabularDataset(path=&#39;../externals/tmp/dataset.csv&#39;, format=&#39;csv&#39;, fields=fields,
+                                        skip_header=True)
+    train_data, valid_data = training_data.split(split_ratio=0.15, random_state=random.seed(2020))
+    TEXT.build_vocab(training_data, min_freq=1, vectors=&#34;glove.6B.100d&#34;)
+    LABEL.build_vocab(training_data)
+    # check whether cuda is available
+    device = t.device(&#39;cuda&#39; if t.cuda.is_available() else &#39;cpu&#39;)
+
+    # set batch size
+    BATCH_SIZE = 32
+
+    # Load an iterator
+    train_iterator, valid_iterator = data.BucketIterator.splits(
+        (train_data, valid_data),
+        batch_size=BATCH_SIZE,
+        sort_key=lambda x: len(x.text),
+        sort_within_batch=True,
+        device=device)
+    # define hyperparameters
+    size_of_vocab = len(TEXT.vocab)
+    params[&#39;size_of_vocab&#39;] = size_of_vocab
+    # instantiate the model
+    model = internal_functions.classifier(size_of_vocab, params[&#39;embedding_dim&#39;], params[&#39;num_hidden_nodes&#39;],
+                                          params[&#39;num_output_nodes&#39;],
+                                          params[&#39;num_layers&#39;], bidirectional=params[&#39;bidirection&#39;],
+                                          dropout=params[&#39;dropout&#39;])
+
+    # Initialize the pretrained embedding
+    pretrained_embeddings = TEXT.vocab.vectors
+    model.embedding.weight.data.copy_(pretrained_embeddings)
+    model, optimizer, criterion = internal_functions.optimizer_and_loss(model, device)
+
+    # Now, we train the model
+    N_EPOCHS = 10
+    best_valid_loss = float(&#39;inf&#39;)
+
+    for epoch in range(N_EPOCHS):
+
+        # train the model
+        model, train_loss, train_acc = internal_functions.train(model, train_iterator, optimizer, criterion)
+
+        # evaluate the model
+        valid_loss, valid_acc = internal_functions.evaluate(model, valid_iterator, criterion)
+
+        # save the best model
+        if valid_loss &lt; best_valid_loss:
+            best_valid_loss = valid_loss
+            _save_obj({&#39;params&#39;: params, &#39;model&#39;: model.state_dict(), &#39;vocab_dict&#39;: TEXT.vocab.stoi,
+                       &#39;label_dict&#39;: LABEL.vocab.stoi, &#39;acc&#39;: valid_acc, &#39;timestamp&#39;: datetime.datetime.utcnow()},
+                      &#39;externals/tmp/section_model&#39;)
+
+        # print(f&#39;\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%&#39;)
+        # print(f&#39;\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%&#39;)
+    os.remove(&#39;externals/tmp/dataset.csv&#39;)
+    if not os.path.exists(&#39;externals/section_model.pkl&#39;):
+        shutil.move(&#39;externals/tmp/section_model.pkl&#39;, &#39;externals/section_model.pkl&#39;)
+    return model, TEXT.vocab.stoi, LABEL.vocab.stoi
+
+
+######PUBLIC FUNCTIONS
+
+###Retrieval functions
+
+def image_feature_extraction(image_file, roi=None):
+    &#34;&#34;&#34;Generates a feature vector for the given image.
+    INPUT: Image file, [Select_roi (True if the user wants to select a ROI ad-hoc, false otherwise), ROI Coordinates of the image in the format [x,y,w,h]]
+    OUTPUT: Feature vector of the image&#34;&#34;&#34;
+    wb_vector = _get_kaze_vector(image_file, roi)[1]
+    bb_vector = _get_neural_embedding(image_file, roi)
+    # We combine both vectors by averaging them:
+    feature_vector = np.mean([wb_vector, bb_vector], axis=0)
+    return feature_vector
+
+
+# INDICATOR 2: Document embedding
+def get_document_embedding(text):
+    &#34;&#34;&#34;Generates the document embedding of a given report
+    INPUT: Textual data
+    OUTPUT: Text embedding&#34;&#34;&#34;
+    spacy.prefer_gpu()
+    nlp = spacy.load(&#39;en_core_sci_md&#39;)
+    doc = nlp(text)
+    embedding = doc.vector
+    del nlp
+    return embedding
+
+
+# INDICATOR 3: NER
+def get_entities(text, named_entities=None, prefix=&#39;&#39;):
+    &#34;&#34;&#34;Detects the existing named entities within the text. Entities are stored in lowercase format to enable string comparison
+    INPUT: Textual data, [Recognized named entities]
+    OUTPUT: Returns a dictionary with the identified named entities and their type&#34;&#34;&#34;
+    # Cat text into a file
+    ner_file = prefix + &#39;externals/tmp/report_ner.txt&#39;
+    with open(ner_file, &#39;w+&#39;) as txt_file:
+        txt_file.write(text)
+    txt_file.close()
+    # Call CliNER
+    os.system(
+        &#39;python &#39; + prefix + &#39;externals/CliNER/cliner predict --txt &#39; + prefix +
+        &#39;externals/tmp/report_ner.txt --out &#39; + prefix + &#39;externals/tmp --model &#39; + prefix + &#39;externals/CliNER/models/silver.crf --format i2b2&#39;)
+    os.remove(ner_file)
+    # Parse output
+    found_entities = {}
+    p1 = re.compile(&#39;c=&#34;([^&#34;]*)&#34;&#39;)
+    p2 = re.compile(&#39;t=&#34;([^&#34;]*)&#34;&#39;)
+    output_ner = prefix + &#39;externals/tmp/report_ner.con&#39;
+    with open(output_ner, &#39;r&#39;) as ner_file:
+        for line in ner_file:
+            if line != &#39;\n&#39;:
+                c = p1.findall(line)[0]
+                t = p2.findall(line)[0]
+                found_entities[c.lower()] = t
+    os.remove(output_ner)
+    if named_entities:
+        cat_ner = {}
+        for ne in named_entities:
+            cat = _query_SNOMED(ne, query_type=&#39;entity_type&#39;)
+            if cat != &#39;N/A&#39;:
+                cat_ner[ne.lower()] = cat
+        found_entities = {**found_entities, **cat_ner}
+    return found_entities
+
+
+# INDICATOR 4: Abbreviatures
+def get_abbr_ratio(text, known_abbreviatures=None):
+    &#34;&#34;&#34;Returns the percentage of dissambiguated abbreviations of the text.
+    INPUT: Textual data, [Abbreviatures already identified]
+    OUTPUT: Percentage of identified abbreviatures&#34;&#34;&#34;
+    spacy.prefer_gpu()
+    nlp = spacy.load(&#39;en_core_sci_md&#39;)
+    abbreviation_pipe = AbbreviationDetector(nlp)
+    nlp.add_pipe(abbreviation_pipe)
+    doc = nlp(text)
+    # Esto tiene que haber una manera mas elegante
+    tokens = list(set([t.text for t in doc if t.text not in string.punctuation]))
+    abbrs = [d.text for d in doc._.abbreviations]
+    if len(abbrs) == 0:
+        return 1
+    if known_abbreviatures:
+        for ka in known_abbreviatures:
+            if ka in abbrs: abbrs.remove(ka)
+    return float(len(list(set(abbrs) &amp; set(tokens)))) / float(len(abbrs))
+
+
+###Solution-related functions
+def section_text(input_report):
+    &#34;&#34;&#34;Formats a given text into the four main sections.
+    INPUT: Report to be formatted
+    OUTPUT: Returns a formatted version of the input report
+    &#34;&#34;&#34;
+    if not os.path.exists(&#39;externals/section_model.pkl&#39;):
+        return None
+    model_data = _load_obj(&#39;externals/section_model&#39;)
+    params = model_data[&#39;params&#39;]
+    model = internal_functions.classifier(params[&#39;size_of_vocab&#39;], params[&#39;embedding_dim&#39;],
+                                          params[&#39;num_hidden_nodes&#39;],
+                                          params[&#39;num_output_nodes&#39;],
+                                          params[&#39;num_layers&#39;], bidirectional=params[&#39;bidirection&#39;],
+                                          dropout=params[&#39;dropout&#39;])
+    model.load_state_dict(model_data[&#39;model&#39;])
+    vocab = model_data[&#39;vocab_dict&#39;]
+    labels = model_data[&#39;label_dict&#39;]
+    labels = {y: x for x, y in labels.items()}
+    model.eval()
+    # First, we split our report into sentences.
+    sentences = input_report.rstrip().split(&#39;.&#39;)
+    # Then, we will predict over each sentence:
+    predictions = {}
+    for s in sentences:
+        if len(s) &gt; 1:
+            predictions[s] = labels[internal_functions.predict_sentence(model, vocab, s)]
+    ret = &#34;&#34;
+    for v in list(set(predictions.values())):
+        ret += &#39;###&#39; + v + &#39;\n&#39;
+        for k in predictions.keys():
+            if predictions[k] == v:
+                ret += k + &#39;.&#39;
+        ret += &#39;\n&#39;
+    return ret
+
+
+def disambiguate_abbreviation(input_report):
+    &#34;&#34;&#34;Provides disambiguation suggestions for the unidentified abbreviations in the text.
+    The suggestions are extracted from SNOMED-CT terminology
+    INPUT: Input Report
+    OUTPUT: A dictionary containing the best match disambiguation per identified abbreviation&#34;&#34;&#34;
+    spacy.prefer_gpu()
+    nlp = spacy.load(&#39;en_core_sci_md&#39;)
+    doc = nlp(input_report)
+    potential_abbreviations = list(
+        set([t.text for t in doc if (t.text not in string.punctuation) and (t.text.isupper())]))
+    dissambiguated_abbreviations = {}
+    exceptions = [&#39;FINDINGS&#39;, &#39;COMPARISON&#39;, &#39;INDICATION&#39;, &#39;IMPRESSION&#39;, &#39;XXXX&#39;]
+    potential_abbreviations = list(set(potential_abbreviations) - set(exceptions))
+    for pa in potential_abbreviations:
+        dissambiguated_abbreviations[pa] = _query_SNOMED(pa)
+    return dissambiguated_abbreviations
+
+
+def return_related_entities(case_entities):
+    &#34;&#34;&#34;Given the entities detected in the report, suggests other related entities grouped by type
+    (disease, procedure, test)
+    INPUT: Set of entities detected in related cases
+    OUTPUT: Entities detected in related cases grouped by type and without duplicates&#34;&#34;&#34;
+    suggested_entities = {}
+    suggested_entities[&#39;problem&#39;] = list(set([k for k, v in case_entities.items() if v == &#39;problem&#39;]))
+    suggested_entities[&#39;test&#39;] = list(set([k for k, v in case_entities.items() if v == &#39;test&#39;]))
+    suggested_entities[&#39;treatment&#39;] = list(set([k for k, v in case_entities.items() if v == &#39;treatment&#39;]))
+    return suggested_entities
+
+
+def get_case_related_entities(st, related_cases):
+    &#34;&#34;&#34;Returns the all the entities featured in the related cases without duplicates.
+    INPUT: Storage unit, related cases.
+    OUTPUT: All the entities and their types contained in the related cases without duplicates&#34;&#34;&#34;
+    existing_ners = {}
+    for c in related_cases:
+        case_ents = st.get_case_entities(c)
+        ents = {}
+        for k, v in case_ents.items():
+            ents.update(v)
+        if not set(existing_ners) &amp; set(ents):
+            for k, e in ents.items():
+                existing_ners[k] = e
+    return existing_ners
+
+
+def section_string_to_dict(sectioned_report):
+    &#34;&#34;&#34;Parses a string containing the sectioned report into a dictionary containing each section and its content
+    INPUT: String containing a sectioned report
+    OUTPUT: Dictionary containing each section with its content&#34;&#34;&#34;
+    sectioned_report_to_dict = {}
+    labels = [&#39;###FINDINGS&#39;, &#39;###COMPARISON&#39;, &#39;###INDICATION&#39;, &#39;###IMPRESSION&#39;, &#39;XXXX&#39;,
+              &#39;FINDINGS&#39;, &#39;COMPARISON&#39;, &#39;INDICATION&#39;, &#39;IMPRESSION&#39;]
+    cur_key = &#39;&#39;
+    cur_section = &#39;&#39;
+    for line in sectioned_report:
+        line = line.rstrip().lstrip()
+        if line in labels:
+            if cur_section != &#39;&#39;:
+                if cur_key.startswith(&#34;#&#34;):
+                    sectioned_report_to_dict[cur_key[3:]] = cur_section
+                else:
+                    sectioned_report_to_dict[cur_key] = cur_section
+                cur_key = line
+                cur_section = &#39;&#39;
+            else:
+                cur_key = line
+        else:
+            if line != &#39;\r&#39;: cur_section += line
+    if cur_key.startswith(&#34;#&#34;):
+        sectioned_report_to_dict[cur_key[3:]] = cur_section
+    else:
+        sectioned_report_to_dict[cur_key] = cur_section
+    return sectioned_report_to_dict
+
+
+# Scoring model
+def generate_scoring_model_data(case_index):
+    &#34;&#34;&#34;Generates the training and evaluation data for the scoring model&#34;&#34;&#34;
+    df = pd.read_pickle(case_index)
+    labeled_rows = df[(df.Validation_Status.isin([&#39;Validated&#39;, &#39;Rejected&#39;]))]
+    embeddings = labeled_rows[&#39;Doc_Embedding&#39;].to_list()
+    labels = labeled_rows[&#39;Validation_Status&#39;].to_list()
+    labels[labels == &#39;Validated&#39;] = 1
+    labels[labels == &#39;Rejected&#39;] = 0
+    x_train, x_test, y_train, y_test = train_test_split(embeddings, labels, test_size=0.25)
+    return [[x_train, y_train], [x_test, y_test]]
+
+
+def train_scoring_model(training_data, test_data):
+    &#34;&#34;&#34;Trains a scoring model &#34;&#34;&#34;
+    model = RandomForestClassifier()
+    model.fit(training_data[0], training_data[1])
+    acc = model.score(test_data[0], test_data[1])
+    _save_obj({&#39;model&#39;: model, &#39;acc&#39;: acc, &#39;timestamp&#39;: datetime.datetime.utcnow()}, &#39;externals/scoring_model&#39;)
+    return model,acc
+
+
+def score_case(input_text):
+    &#34;&#34;&#34;Scores an input report.
+    INPUT: Report to evaluate in textual format
+    OUTPUT: Prediction, Confidence value&#34;&#34;&#34;
+    model=_load_obj(&#39;externals/scoring_model&#39;)
+    predicting_model=model[&#39;model&#39;]
+    embedding = get_document_embedding(input_text)
+    predictions=predicting_model.predict_proba(np.reshape(embedding,(-1,embedding.shape[0])))
+    if predictions[0].argmax()==0:
+        return {&#39;result&#39;:&#39;Rejected&#39;,&#39;confidence&#39;:predictions[0][0]}
+    else:
+        return {&#39;result&#39;:&#39;Validated&#39;,&#39;confidence&#39;:predictions[0][1]}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="internal_functions.functions.disambiguate_abbreviation"><code class="name flex">
+<span>def <span class="ident">disambiguate_abbreviation</span></span>(<span>input_report)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides disambiguation suggestions for the unidentified abbreviations in the text.
+The suggestions are extracted from SNOMED-CT terminology
+INPUT: Input Report
+OUTPUT: A dictionary containing the best match disambiguation per identified abbreviation</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disambiguate_abbreviation(input_report):
+    &#34;&#34;&#34;Provides disambiguation suggestions for the unidentified abbreviations in the text.
+    The suggestions are extracted from SNOMED-CT terminology
+    INPUT: Input Report
+    OUTPUT: A dictionary containing the best match disambiguation per identified abbreviation&#34;&#34;&#34;
+    spacy.prefer_gpu()
+    nlp = spacy.load(&#39;en_core_sci_md&#39;)
+    doc = nlp(input_report)
+    potential_abbreviations = list(
+        set([t.text for t in doc if (t.text not in string.punctuation) and (t.text.isupper())]))
+    dissambiguated_abbreviations = {}
+    exceptions = [&#39;FINDINGS&#39;, &#39;COMPARISON&#39;, &#39;INDICATION&#39;, &#39;IMPRESSION&#39;, &#39;XXXX&#39;]
+    potential_abbreviations = list(set(potential_abbreviations) - set(exceptions))
+    for pa in potential_abbreviations:
+        dissambiguated_abbreviations[pa] = _query_SNOMED(pa)
+    return dissambiguated_abbreviations</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.generate_scoring_model_data"><code class="name flex">
+<span>def <span class="ident">generate_scoring_model_data</span></span>(<span>case_index)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates the training and evaluation data for the scoring model</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_scoring_model_data(case_index):
+    &#34;&#34;&#34;Generates the training and evaluation data for the scoring model&#34;&#34;&#34;
+    df = pd.read_pickle(case_index)
+    labeled_rows = df[(df.Validation_Status.isin([&#39;Validated&#39;, &#39;Rejected&#39;]))]
+    embeddings = labeled_rows[&#39;Doc_Embedding&#39;].to_list()
+    labels = labeled_rows[&#39;Validation_Status&#39;].to_list()
+    labels[labels == &#39;Validated&#39;] = 1
+    labels[labels == &#39;Rejected&#39;] = 0
+    x_train, x_test, y_train, y_test = train_test_split(embeddings, labels, test_size=0.25)
+    return [[x_train, y_train], [x_test, y_test]]</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.get_abbr_ratio"><code class="name flex">
+<span>def <span class="ident">get_abbr_ratio</span></span>(<span>text, known_abbreviatures=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the percentage of dissambiguated abbreviations of the text.
+INPUT: Textual data, [Abbreviatures already identified]
+OUTPUT: Percentage of identified abbreviatures</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_abbr_ratio(text, known_abbreviatures=None):
+    &#34;&#34;&#34;Returns the percentage of dissambiguated abbreviations of the text.
+    INPUT: Textual data, [Abbreviatures already identified]
+    OUTPUT: Percentage of identified abbreviatures&#34;&#34;&#34;
+    spacy.prefer_gpu()
+    nlp = spacy.load(&#39;en_core_sci_md&#39;)
+    abbreviation_pipe = AbbreviationDetector(nlp)
+    nlp.add_pipe(abbreviation_pipe)
+    doc = nlp(text)
+    # Esto tiene que haber una manera mas elegante
+    tokens = list(set([t.text for t in doc if t.text not in string.punctuation]))
+    abbrs = [d.text for d in doc._.abbreviations]
+    if len(abbrs) == 0:
+        return 1
+    if known_abbreviatures:
+        for ka in known_abbreviatures:
+            if ka in abbrs: abbrs.remove(ka)
+    return float(len(list(set(abbrs) &amp; set(tokens)))) / float(len(abbrs))</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.get_case_related_entities"><code class="name flex">
+<span>def <span class="ident">get_case_related_entities</span></span>(<span>st, related_cases)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the all the entities featured in the related cases without duplicates.
+INPUT: Storage unit, related cases.
+OUTPUT: All the entities and their types contained in the related cases without duplicates</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_case_related_entities(st, related_cases):
+    &#34;&#34;&#34;Returns the all the entities featured in the related cases without duplicates.
+    INPUT: Storage unit, related cases.
+    OUTPUT: All the entities and their types contained in the related cases without duplicates&#34;&#34;&#34;
+    existing_ners = {}
+    for c in related_cases:
+        case_ents = st.get_case_entities(c)
+        ents = {}
+        for k, v in case_ents.items():
+            ents.update(v)
+        if not set(existing_ners) &amp; set(ents):
+            for k, e in ents.items():
+                existing_ners[k] = e
+    return existing_ners</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.get_document_embedding"><code class="name flex">
+<span>def <span class="ident">get_document_embedding</span></span>(<span>text)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates the document embedding of a given report
+INPUT: Textual data
+OUTPUT: Text embedding</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_document_embedding(text):
+    &#34;&#34;&#34;Generates the document embedding of a given report
+    INPUT: Textual data
+    OUTPUT: Text embedding&#34;&#34;&#34;
+    spacy.prefer_gpu()
+    nlp = spacy.load(&#39;en_core_sci_md&#39;)
+    doc = nlp(text)
+    embedding = doc.vector
+    del nlp
+    return embedding</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.get_entities"><code class="name flex">
+<span>def <span class="ident">get_entities</span></span>(<span>text, named_entities=None, prefix='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Detects the existing named entities within the text. Entities are stored in lowercase format to enable string comparison
+INPUT: Textual data, [Recognized named entities]
+OUTPUT: Returns a dictionary with the identified named entities and their type</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_entities(text, named_entities=None, prefix=&#39;&#39;):
+    &#34;&#34;&#34;Detects the existing named entities within the text. Entities are stored in lowercase format to enable string comparison
+    INPUT: Textual data, [Recognized named entities]
+    OUTPUT: Returns a dictionary with the identified named entities and their type&#34;&#34;&#34;
+    # Cat text into a file
+    ner_file = prefix + &#39;externals/tmp/report_ner.txt&#39;
+    with open(ner_file, &#39;w+&#39;) as txt_file:
+        txt_file.write(text)
+    txt_file.close()
+    # Call CliNER
+    os.system(
+        &#39;python &#39; + prefix + &#39;externals/CliNER/cliner predict --txt &#39; + prefix +
+        &#39;externals/tmp/report_ner.txt --out &#39; + prefix + &#39;externals/tmp --model &#39; + prefix + &#39;externals/CliNER/models/silver.crf --format i2b2&#39;)
+    os.remove(ner_file)
+    # Parse output
+    found_entities = {}
+    p1 = re.compile(&#39;c=&#34;([^&#34;]*)&#34;&#39;)
+    p2 = re.compile(&#39;t=&#34;([^&#34;]*)&#34;&#39;)
+    output_ner = prefix + &#39;externals/tmp/report_ner.con&#39;
+    with open(output_ner, &#39;r&#39;) as ner_file:
+        for line in ner_file:
+            if line != &#39;\n&#39;:
+                c = p1.findall(line)[0]
+                t = p2.findall(line)[0]
+                found_entities[c.lower()] = t
+    os.remove(output_ner)
+    if named_entities:
+        cat_ner = {}
+        for ne in named_entities:
+            cat = _query_SNOMED(ne, query_type=&#39;entity_type&#39;)
+            if cat != &#39;N/A&#39;:
+                cat_ner[ne.lower()] = cat
+        found_entities = {**found_entities, **cat_ner}
+    return found_entities</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.image_feature_extraction"><code class="name flex">
+<span>def <span class="ident">image_feature_extraction</span></span>(<span>image_file, roi=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates a feature vector for the given image.
+INPUT: Image file, [Select_roi (True if the user wants to select a ROI ad-hoc, false otherwise), ROI Coordinates of the image in the format [x,y,w,h]]
+OUTPUT: Feature vector of the image</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def image_feature_extraction(image_file, roi=None):
+    &#34;&#34;&#34;Generates a feature vector for the given image.
+    INPUT: Image file, [Select_roi (True if the user wants to select a ROI ad-hoc, false otherwise), ROI Coordinates of the image in the format [x,y,w,h]]
+    OUTPUT: Feature vector of the image&#34;&#34;&#34;
+    wb_vector = _get_kaze_vector(image_file, roi)[1]
+    bb_vector = _get_neural_embedding(image_file, roi)
+    # We combine both vectors by averaging them:
+    feature_vector = np.mean([wb_vector, bb_vector], axis=0)
+    return feature_vector</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.return_related_entities"><code class="name flex">
+<span>def <span class="ident">return_related_entities</span></span>(<span>case_entities)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Given the entities detected in the report, suggests other related entities grouped by type
+(disease, procedure, test)
+INPUT: Set of entities detected in related cases
+OUTPUT: Entities detected in related cases grouped by type and without duplicates</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def return_related_entities(case_entities):
+    &#34;&#34;&#34;Given the entities detected in the report, suggests other related entities grouped by type
+    (disease, procedure, test)
+    INPUT: Set of entities detected in related cases
+    OUTPUT: Entities detected in related cases grouped by type and without duplicates&#34;&#34;&#34;
+    suggested_entities = {}
+    suggested_entities[&#39;problem&#39;] = list(set([k for k, v in case_entities.items() if v == &#39;problem&#39;]))
+    suggested_entities[&#39;test&#39;] = list(set([k for k, v in case_entities.items() if v == &#39;test&#39;]))
+    suggested_entities[&#39;treatment&#39;] = list(set([k for k, v in case_entities.items() if v == &#39;treatment&#39;]))
+    return suggested_entities</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.score_case"><code class="name flex">
+<span>def <span class="ident">score_case</span></span>(<span>input_text)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Scores an input report.
+INPUT: Report to evaluate in textual format
+OUTPUT: Prediction, Confidence value</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def score_case(input_text):
+    &#34;&#34;&#34;Scores an input report.
+    INPUT: Report to evaluate in textual format
+    OUTPUT: Prediction, Confidence value&#34;&#34;&#34;
+    model=_load_obj(&#39;externals/scoring_model&#39;)
+    predicting_model=model[&#39;model&#39;]
+    embedding = get_document_embedding(input_text)
+    predictions=predicting_model.predict_proba(np.reshape(embedding,(-1,embedding.shape[0])))
+    if predictions[0].argmax()==0:
+        return {&#39;result&#39;:&#39;Rejected&#39;,&#39;confidence&#39;:predictions[0][0]}
+    else:
+        return {&#39;result&#39;:&#39;Validated&#39;,&#39;confidence&#39;:predictions[0][1]}</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.section_string_to_dict"><code class="name flex">
+<span>def <span class="ident">section_string_to_dict</span></span>(<span>sectioned_report)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Parses a string containing the sectioned report into a dictionary containing each section and its content
+INPUT: String containing a sectioned report
+OUTPUT: Dictionary containing each section with its content</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def section_string_to_dict(sectioned_report):
+    &#34;&#34;&#34;Parses a string containing the sectioned report into a dictionary containing each section and its content
+    INPUT: String containing a sectioned report
+    OUTPUT: Dictionary containing each section with its content&#34;&#34;&#34;
+    sectioned_report_to_dict = {}
+    labels = [&#39;###FINDINGS&#39;, &#39;###COMPARISON&#39;, &#39;###INDICATION&#39;, &#39;###IMPRESSION&#39;, &#39;XXXX&#39;,
+              &#39;FINDINGS&#39;, &#39;COMPARISON&#39;, &#39;INDICATION&#39;, &#39;IMPRESSION&#39;]
+    cur_key = &#39;&#39;
+    cur_section = &#39;&#39;
+    for line in sectioned_report:
+        line = line.rstrip().lstrip()
+        if line in labels:
+            if cur_section != &#39;&#39;:
+                if cur_key.startswith(&#34;#&#34;):
+                    sectioned_report_to_dict[cur_key[3:]] = cur_section
+                else:
+                    sectioned_report_to_dict[cur_key] = cur_section
+                cur_key = line
+                cur_section = &#39;&#39;
+            else:
+                cur_key = line
+        else:
+            if line != &#39;\r&#39;: cur_section += line
+    if cur_key.startswith(&#34;#&#34;):
+        sectioned_report_to_dict[cur_key[3:]] = cur_section
+    else:
+        sectioned_report_to_dict[cur_key] = cur_section
+    return sectioned_report_to_dict</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.section_text"><code class="name flex">
+<span>def <span class="ident">section_text</span></span>(<span>input_report)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Formats a given text into the four main sections.
+INPUT: Report to be formatted
+OUTPUT: Returns a formatted version of the input report</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def section_text(input_report):
+    &#34;&#34;&#34;Formats a given text into the four main sections.
+    INPUT: Report to be formatted
+    OUTPUT: Returns a formatted version of the input report
+    &#34;&#34;&#34;
+    if not os.path.exists(&#39;externals/section_model.pkl&#39;):
+        return None
+    model_data = _load_obj(&#39;externals/section_model&#39;)
+    params = model_data[&#39;params&#39;]
+    model = internal_functions.classifier(params[&#39;size_of_vocab&#39;], params[&#39;embedding_dim&#39;],
+                                          params[&#39;num_hidden_nodes&#39;],
+                                          params[&#39;num_output_nodes&#39;],
+                                          params[&#39;num_layers&#39;], bidirectional=params[&#39;bidirection&#39;],
+                                          dropout=params[&#39;dropout&#39;])
+    model.load_state_dict(model_data[&#39;model&#39;])
+    vocab = model_data[&#39;vocab_dict&#39;]
+    labels = model_data[&#39;label_dict&#39;]
+    labels = {y: x for x, y in labels.items()}
+    model.eval()
+    # First, we split our report into sentences.
+    sentences = input_report.rstrip().split(&#39;.&#39;)
+    # Then, we will predict over each sentence:
+    predictions = {}
+    for s in sentences:
+        if len(s) &gt; 1:
+            predictions[s] = labels[internal_functions.predict_sentence(model, vocab, s)]
+    ret = &#34;&#34;
+    for v in list(set(predictions.values())):
+        ret += &#39;###&#39; + v + &#39;\n&#39;
+        for k in predictions.keys():
+            if predictions[k] == v:
+                ret += k + &#39;.&#39;
+        ret += &#39;\n&#39;
+    return ret</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.train_scoring_model"><code class="name flex">
+<span>def <span class="ident">train_scoring_model</span></span>(<span>training_data, test_data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Trains a scoring model</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def train_scoring_model(training_data, test_data):
+    &#34;&#34;&#34;Trains a scoring model &#34;&#34;&#34;
+    model = RandomForestClassifier()
+    model.fit(training_data[0], training_data[1])
+    acc = model.score(test_data[0], test_data[1])
+    _save_obj({&#39;model&#39;: model, &#39;acc&#39;: acc, &#39;timestamp&#39;: datetime.datetime.utcnow()}, &#39;externals/scoring_model&#39;)
+    return model,acc</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.functions.train_section_model"><code class="name flex">
+<span>def <span class="ident">train_section_model</span></span>(<span>case_folder, params=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Trains a section formatting model. If no specific parameters are specified, the best identified values are used.
+OUTPUT: Trained model, text vocabulary and label vocabulary</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def train_section_model(case_folder, params=None):
+    &#34;&#34;&#34;Trains a section formatting model. If no specific parameters are specified, the best identified values are used.
+    OUTPUT: Trained model, text vocabulary and label vocabulary&#34;&#34;&#34;
+    _prepare_data(case_folder)
+    if params is None:
+        params = {&#39;embedding_dim&#39;: 100, &#39;num_hidden_nodes&#39;: 32, &#39;num_output_nodes&#39;: 5, &#39;bidirection&#39;: True,
+                  &#39;num_layers&#39;: 2, &#39;dropout&#39;: 0.2}
+    t.backends.cudnn.deterministic = True
+    TEXT = data.Field(tokenize=&#39;spacy&#39;, batch_first=True, include_lengths=True)
+    LABEL = data.LabelField(dtype=t.long, batch_first=True)
+    fields = [(&#39;text&#39;, TEXT), (&#39;label&#39;, LABEL)]
+    training_data = data.TabularDataset(path=&#39;../externals/tmp/dataset.csv&#39;, format=&#39;csv&#39;, fields=fields,
+                                        skip_header=True)
+    train_data, valid_data = training_data.split(split_ratio=0.15, random_state=random.seed(2020))
+    TEXT.build_vocab(training_data, min_freq=1, vectors=&#34;glove.6B.100d&#34;)
+    LABEL.build_vocab(training_data)
+    # check whether cuda is available
+    device = t.device(&#39;cuda&#39; if t.cuda.is_available() else &#39;cpu&#39;)
+
+    # set batch size
+    BATCH_SIZE = 32
+
+    # Load an iterator
+    train_iterator, valid_iterator = data.BucketIterator.splits(
+        (train_data, valid_data),
+        batch_size=BATCH_SIZE,
+        sort_key=lambda x: len(x.text),
+        sort_within_batch=True,
+        device=device)
+    # define hyperparameters
+    size_of_vocab = len(TEXT.vocab)
+    params[&#39;size_of_vocab&#39;] = size_of_vocab
+    # instantiate the model
+    model = internal_functions.classifier(size_of_vocab, params[&#39;embedding_dim&#39;], params[&#39;num_hidden_nodes&#39;],
+                                          params[&#39;num_output_nodes&#39;],
+                                          params[&#39;num_layers&#39;], bidirectional=params[&#39;bidirection&#39;],
+                                          dropout=params[&#39;dropout&#39;])
+
+    # Initialize the pretrained embedding
+    pretrained_embeddings = TEXT.vocab.vectors
+    model.embedding.weight.data.copy_(pretrained_embeddings)
+    model, optimizer, criterion = internal_functions.optimizer_and_loss(model, device)
+
+    # Now, we train the model
+    N_EPOCHS = 10
+    best_valid_loss = float(&#39;inf&#39;)
+
+    for epoch in range(N_EPOCHS):
+
+        # train the model
+        model, train_loss, train_acc = internal_functions.train(model, train_iterator, optimizer, criterion)
+
+        # evaluate the model
+        valid_loss, valid_acc = internal_functions.evaluate(model, valid_iterator, criterion)
+
+        # save the best model
+        if valid_loss &lt; best_valid_loss:
+            best_valid_loss = valid_loss
+            _save_obj({&#39;params&#39;: params, &#39;model&#39;: model.state_dict(), &#39;vocab_dict&#39;: TEXT.vocab.stoi,
+                       &#39;label_dict&#39;: LABEL.vocab.stoi, &#39;acc&#39;: valid_acc, &#39;timestamp&#39;: datetime.datetime.utcnow()},
+                      &#39;externals/tmp/section_model&#39;)
+
+        # print(f&#39;\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%&#39;)
+        # print(f&#39;\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%&#39;)
+    os.remove(&#39;externals/tmp/dataset.csv&#39;)
+    if not os.path.exists(&#39;externals/section_model.pkl&#39;):
+        shutil.move(&#39;externals/tmp/section_model.pkl&#39;, &#39;externals/section_model.pkl&#39;)
+    return model, TEXT.vocab.stoi, LABEL.vocab.stoi</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="internal_functions" href="index.html">internal_functions</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="internal_functions.functions.disambiguate_abbreviation" href="#internal_functions.functions.disambiguate_abbreviation">disambiguate_abbreviation</a></code></li>
+<li><code><a title="internal_functions.functions.generate_scoring_model_data" href="#internal_functions.functions.generate_scoring_model_data">generate_scoring_model_data</a></code></li>
+<li><code><a title="internal_functions.functions.get_abbr_ratio" href="#internal_functions.functions.get_abbr_ratio">get_abbr_ratio</a></code></li>
+<li><code><a title="internal_functions.functions.get_case_related_entities" href="#internal_functions.functions.get_case_related_entities">get_case_related_entities</a></code></li>
+<li><code><a title="internal_functions.functions.get_document_embedding" href="#internal_functions.functions.get_document_embedding">get_document_embedding</a></code></li>
+<li><code><a title="internal_functions.functions.get_entities" href="#internal_functions.functions.get_entities">get_entities</a></code></li>
+<li><code><a title="internal_functions.functions.image_feature_extraction" href="#internal_functions.functions.image_feature_extraction">image_feature_extraction</a></code></li>
+<li><code><a title="internal_functions.functions.return_related_entities" href="#internal_functions.functions.return_related_entities">return_related_entities</a></code></li>
+<li><code><a title="internal_functions.functions.score_case" href="#internal_functions.functions.score_case">score_case</a></code></li>
+<li><code><a title="internal_functions.functions.section_string_to_dict" href="#internal_functions.functions.section_string_to_dict">section_string_to_dict</a></code></li>
+<li><code><a title="internal_functions.functions.section_text" href="#internal_functions.functions.section_text">section_text</a></code></li>
+<li><code><a title="internal_functions.functions.train_scoring_model" href="#internal_functions.functions.train_scoring_model">train_scoring_model</a></code></li>
+<li><code><a title="internal_functions.functions.train_section_model" href="#internal_functions.functions.train_section_model">train_section_model</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

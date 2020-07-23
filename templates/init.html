@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <title>r.AID.ologist</title>
+    <link rel="stylesheet" href="static/bootstrap.css">
+    <link rel="stylesheet" media="screen" href="static/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+    function clear_input() {
+		  document.getElementById('image_file').value= null;
+        }
+    </script>
+
+</head>
+
+<body>
+     <div class="myheader">
+		  <img class="center_image" src="static/images/logo.png" alt=""/>
+	 </div>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <div id="pageloader">
+        <h3 style="text-align: center;margin-bottom: -100px;margin-top: 150px;">Please wait while we perform some operations</h3>
+       <img class="flex-form-img" src="static/Preloader_3.gif" alt="processing..." />
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('expert_settings')}}">Expert Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('explore_cases') }}">Search Existing Cases</a>
+              </li>
+            </ul>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('exit_stu') }}" style="color:#EF7479">Exit</a>
+                </li>
+            </ul>
+      </div>
+    </nav>
+         <form action="/create_problem" method="post" role="form" id="cbr_form" enctype="multipart/form-data">
+         {{ form.csrf_token }} {{ form.name }}
+         <div class="cbr-container">
+             <div class="cbr-left">
+             <div class="form-group">
+              <h4>Insert your report here</h4>
+              <textarea class="form-control" name="input_report" id="exampleTextarea" rows="10" required></textarea>
+            </div>
+             <div class="form-group">
+                 <h4>Load your radiography here</h4>
+                 <div class="form-group-image-file">
+                     <input type="file" class="form-control-file" name="image_file" id="image_file" aria-describedby="fileHelp">
+                     <i onclick="clear_input()" class="fa fa-trash-o" style="font-size:25px;color:#fd7f74" position="right"></i>
+                </div>
+             </div>
+                 <div class="form-group">
+                     <div class="custom-control custom-checkbox">
+                     <input type="checkbox" class="custom-control-input" id="customCheck1" name="rois" value="FALSE"/>
+                         <script>$('input[type=checkbox]').removeAttr('checked');</script>
+                         <script> $('#customCheck1').change(function(){
+                                     cb = $(this);
+                                     cb.val(cb.prop('checked'));
+                                    });
+                         </script>
+
+                  <label class="custom-control-label" for="customCheck1">Do you want to select a region of interest?</label>
+                    </div>
+                 </div>
+         </div>
+         <div class="cbr-right">
+             <div class="form-group">
+              <h4>Do you want to look for cases containing specific terms?</h4>
+              <input type="text" class="form-control" name="ne_terms" placeholder="Insert each term separated with commas" id="inputDefault">
+            </div>
+             <div class="form-group">
+              <h4>Are you using any specific abbreviations in your report?</h4>
+              <input type="text" class="form-control" name="abbrvs" placeholder="Insert each abbreviation separated with commas" id="inputDefault2">
+            </div>
+             <button type="submit" class="btn btn-primary">Submit</button>
+         </div>
+         </div>
+          <script>
+                 $(document).ready(function(){
+                      $("#cbr_form").on("submit", function(){
+                        $("#pageloader").fadeIn();
+                      });//submit
+                    });
+             </script>
+         </form>
+
+<footer>
+<p style="margin-left: 20px;">This framework was developed as part of the AI4EU project. Further documentation can be
+found <a href="static/docs/index.html">here</a> </p>
+    <div class="form-group-image-file" style="margin:20px;">
+  <img alt="Qries" src="static/images/Logo_OEG.gif"
+         width=150"  align="left" style="margin-left:30px;">
+
+	<img alt="Qries" src="https://www.ai4eu.eu/themes/custom/ai4eu/logo.svg"
+		 width=200" align="right" style="margin:20px;margin-left: 65%;">
+        </div>
+</footer>
+</body>
+</html>

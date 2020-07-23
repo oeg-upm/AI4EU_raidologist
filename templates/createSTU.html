@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <title>r.AID.ologist</title>
+    <link rel="stylesheet" href="static/bootstrap.css">
+    <link rel="stylesheet" media="screen" href="static/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<script>
+	function toggle_display() {
+		  var x = document.getElementById("stu-form");
+		  if (x.style.display === "none") {
+			x.style.display = "block";
+		  } else {
+			x.style.display = "none";
+		  }
+}
+	
+	</script>
+	<script>
+		function show_login() {
+			var x= document.getElementById("login");
+			 if (x.style.display === "none") {
+			x.style.display = "block";
+		  }
+		}
+	</script>
+	<script>
+	function dismiss(id) {
+		  var x = document.getElementById(id);
+		  if (x.style.display === "inline-block") {
+			x.style.display = "none";
+		  }
+		}
+
+	</script>
+
+</head>
+
+<body>
+     <div class="myheader">
+		  <img class="center_image" src="static/images/logo.png" alt=""/>
+	 </div>
+	  {% with errors = get_flashed_messages() %}
+        {% if errors %}
+	 		 <div class="alert alert-dismissible alert-danger" id="error_notification" style="text-align: center">
+                      <button type="button" class="close" id="error_alerta" data-dismiss="alert" onclick="dismiss('error_alerta')">&times;</button>
+                        <h2>Error!</h2> <p>{{ errors }}</p>
+				</div>
+
+        {% endif %}
+     {% endwith %}
+		<h3 style="margin-top:20px;" align="center">First, we need to set up some parameters...</h3>
+		<form action="/set_stu" method="post" style="margin:20px;">
+			<input type="hidden" name="stu_option" value="ecgen">
+			<button type="submit" class="btn btn-outline-info btn-lg btn-block">Use sample cases</button>
+		</form>
+		<form action="/set_stu" method="post" role="form" style="margin:20px;">
+			{{ form.csrf_token }}
+            {{ form.name }}
+			<input type="hidden" name="stu_option" value="own">
+		<button type="button" onclick="toggle_display()" class="btn btn-outline-secondary btn-lg btn-block">I want to use my own data</button>
+		<div class="stu-form" id="stu-form"  style="display:none;">
+			<div class="alert alert-dismissible alert-warning" id="alert_ftp" style="text-align:center;display: inline-block;">
+				<strong><h4>WARNING!</h4></strong>
+				<p>Make sure that the indicated folders are accessible, and that you have reading and writing permissions.</p>
+			</div>
+            {{ form.csrf }}
+			<fieldset>
+				<h4>Server parameters</h4>
+                <input name="server_type" value="sftp" style="display: none">
+				<input class="form-control" id="ftp_server" name="server_name" placeholder="Enter the direction of your FTP server">
+				<div class="form-group" id="login" style="display: none;">
+					<label for="case_folder">Username</label>
+					<input class="form-control" id="id_user" name="username" placeholder="Insert your username">
+					<label for="id_password">Password</label>
+					<input type="password" class="form-control" id="id_password" name="user_pass" placeholder="Insert your password">
+				</div>
+					<button type="button" class="btn btn-success" style="margin:10px;" onclick="show_login()">Login</button>
+				<h4>Data parameters</h4>
+                <div class="form-group">
+				  <label for="case_folder">Case storage folder</label>
+					 <input class="form-control" id="case_folder" name="case_folder" placeholder="Enter the path to the server directory where the original reports are stored">
+				</div>
+					<div class="form-group">
+					  <label for="original_data">Original data folder</label>
+					  <input class="form-control" id="original_data" name="original_data" placeholder="Enter the path to the server directory where the original reports are stored">
+					</div><div class="form-group">
+					  <label for="case_prefix">Case prefix</label>
+					  <input class="form-control" id="case_prefix" name="case_prefix" placeholder="Enter a prefix to identify the cases">
+					</div>
+					<div class="form-group">
+						<div class="alert alert-dismissible alert-info">
+							<strong>INFO: </strong>
+							<p>If you already have a valid index file (in zip format), please indicate the absolute path to it.</p>
+							<p><em>I.e: path_to_case_file/case_index.zip</em></p>
+							<p>If you <strong>DO NOT</strong> have a valid index file, just input a name for it and we will do
+								it for you &#128578;</p>
+						</div>
+					  <label for="case_index_file">Case index file</label>
+					  <input class="form-control" id="case_index_file" name="case_index_file" placeholder="Choose a name for your case index file">
+					</div>
+			</fieldset>
+            <button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+        </form>
+	</div>
+</div>
+<footer>
+<p style="margin-left: 20px;">This framework was developed as part of the AI4EU project. Further documentation can be
+found <a href="static/docs/index.html">here</a> </p>
+    <div class="form-group-image-file" style="margin:20px;">
+  <img alt="Qries" src="static/images/Logo_OEG.gif"
+         width=150"  align="left" style="margin-left:30px;">
+
+	<img alt="Qries" src="https://www.ai4eu.eu/themes/custom/ai4eu/logo.svg"
+		 width=200" align="right" style="margin:20px;margin-left: 65%;">
+        </div>
+</footer>
+</body>
+</html>

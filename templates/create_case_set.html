@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <title>r.AID.ologist</title>
+    <link rel="stylesheet" href="static/bootstrap.css">
+    <link rel="stylesheet" media="screen" href="static/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+    <script src='http://odyniec.net/projects/imgareaselect/jquery.imgareaselect.pack.js'></script>
+    <script src='http://odyniec.net/projects/imgareaselect/jquery.imgareaselect.dev.js'></script>
+    <link rel="stylesheet" type="text/css" href="http://odyniec.net/projects/imgareaselect/css/imgareaselect-animated.css" />
+    <script>
+        $(document).ready(function () {
+              $('#tooltip_xml').tooltip();
+            });
+    </script>
+       <script>
+	function dismiss(id) {
+		  var x = document.getElementById(id);
+		  if (x.style.display === "block") {
+			x.style.display = "none";
+		  }
+		}
+
+	</script>
+    <script>
+	function show(id) {
+		  var x = document.getElementById(id);
+		  if (x.style.display === "none") {
+			x.style.display = "block";
+		  }
+		}
+
+	</script>
+    <script>
+		function show_modal(id) {
+			var x= document.getElementById(id);
+			 if (x.style.display === "none") {
+			x.style.display = "inline-block";
+		  }
+		}
+	</script>
+    <script>
+		function close_modal(id) {
+			var x= document.getElementById(id);
+			 if (x.style.display === "inline-block") {
+			x.style.display = "none";
+		  }
+		}
+	</script>
+   <script>
+    function toggle_display(id) {
+      var x = document.getElementById(id);
+      if (x.style.display === "block") {
+        x.style.display = "none";
+      }
+      else if (x.style.display === "none"){
+          x.style.display="block";
+    }
+    }
+    </script>
+
+
+</head>
+
+<body>
+     <div class="myheader">
+		  <img class="center_image" src="static/images/logo.png" alt=""/>
+	 </div>
+    <div id="pageloader">
+        <h3 style="text-align: center;margin-bottom: -100px;margin-top: 150px;">Please wait while we perform some operations</h3>
+       <img class="flex-form-img" src="static/Preloader_3.gif" alt="processing..." />
+    </div>
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('expert_settings')}}">Expert Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('explore_cases') }}">Search Existing Cases</a>
+              </li>
+            </ul>
+          </div>
+    </nav>
+    <form action="/create_case_set" method="post" id="cbr_form">
+        <div class="cbr-container-2">
+        <div class="alert alert-dismissible alert-info" id="alert_set" style="text-align:center;margin:20px;display:block;">
+               <button type="button" class="close" data-dismiss="alert" onclick="dismiss('alert_set')">&times;</button>
+                <strong><h4>INFO</h4></strong>
+                <p>Make sure that your reports are located in a <em>/reports/</em> folder under the original data path.
+                Images should be located in a <em>/images/</em> folder</p>
+                <p>Folder structure should be as follows:</p>
+                <div class="code_snippet">
+                    <p><strong>originals_folder</strong></p>
+                    <p>├───images</p>
+                    <p>└───reports</p>
+                </div>
+        </div>
+            <div class="form-group" style="align-content: center;text-align: center;">
+                <h4>Is your data formatted as XML or in plain text files?</h4>
+            <div class="custom-control custom-radio">
+              <input type="radio" name="data_format" value="None" class="custom-control-input" checked="checked" style="visibility: hidden;">
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="data_format_xml" name="data_format" value="xml" onclick="close_modal('select_plain');toggle_display('select_xml')" class="custom-control-input">
+              <label class="custom-control-label" for="data_format_xml" style="font-size: 18px;">XML</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="data_format_plain" name="data_format" value="plain" onclick="dismiss('select_xml');show_modal('select_plain')" class="custom-control-input">
+              <label class="custom-control-label" for="data_format_plain" style="font-size: 18px;">Plain</label>
+            </div>
+          </div>
+              <div class="alert alert-dismissible alert-warning" id="select_plain" style="display:none;">
+                  <button type="button" class="close" data-dismiss="alert" onclick="close_modal('select_plain')">&times;</button>
+                  <h4 class="alert-heading">Warning!</h4>
+                  <p class="mb-0">Make sure that report and images begin with the same identifying prefix</p>
+                  <em><p>I.E:
+                  <p>├───images</p>
+                  <p>|.....f10_image_file_1.dcm</p>
+                  <p>|.....f10_image_file_2.dcm</p>
+                  <p>├───reports</p>
+                  <p>|.....f10_report.txt</p>
+                  </p></em>
+          </div>
+            <div class="select_module" id="select_xml" style="display: none;">
+                <div class="form-group-image-file">
+                <h5>We need to know a little bit more about your data</h5>
+                <button id="tooltip_xml" type="button" class="clearbutton" onclick="show_modal('xml_help')" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Click if you need some help" data-original-title="Click if you need some help">
+                    <i class="fa fa-info-circle" style="color:#4bb690; font-size: 25px;"></i>
+                </button>
+                </div>
+                <div class="modal" id="xml_help" style="display: none;">
+                      <div class="modal-dialog modal-dialog-scrollable"  role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">A sample XML report file</h5>
+                            <button type="button" class="close" data-dismiss="modal" onclick="close_modal('xml_help')" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                           <p><strong>Each report file is composed by at least two differentiated sections:
+                               a medical report (compulsory) and the associated image files (optional)</strong></p>
+                            <p>The following image shows an example of the medical report contained within the file. The content
+                            associated to the medical report is identified by the tag <em>AbstractText</em>. Each section within
+                            the report is identified by the attribute <em>Label</em>.</p>
+                              <img src="static/images/report_sample.png" width="400" class="center">
+                              <p>The following image shows an example of the declaration of the image files associated to
+                              the report. Image files are identified by the tag <em>parentImage</em>. Inside each <em>parentImage</em>,
+                              each image file is identified by the attribute <em>id</em>. If there is a region of interest annotated in
+                              the image, it can be specified using an identifying tag. In this example, the tag <em>roi</em> is employed
+                              to define the values associated with the region of interest. The attribute <em>coordinate</em> identifies
+                              each of the coordinates composing the ROI, namely: X and Y coordinates of the left-superior corner, Width
+                              and Height.</p>
+                              <img src="static/images/image_sample.png" width="400" class="center">
+                              <p>If the reports contain any specific medical terms, or is related to any medical term, it can
+                              be also specified. The image below shows an example of medical terms, according to MeSH terminology,
+                              that have been annotated within the report. They are identified under the tag <em>MeSH</em>.
+                              Abbreviations can be also specified using XML tags, as shown in the image, where the <em>abbv</em>
+                              tag is used.</p>
+                              <img src="static/images/term_sample.png" width="400" class="center">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <h6>Which XML tag is used to identify...</h6>
+                <div class="form-group">
+                  <label class="col-form-label" for="report_tag">Report content</label>
+                  <input type="text" class="form-control" name="report_tag" id="report_tag">
+                </div>
+                Does your report tag contain an attribute <strong>Label</strong> value identifying each section?
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="report_label_yes" name="report_label" value="yes" class="custom-control-input" checked="">
+                  <label class="custom-control-label" for="report_label_yes">Yes</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="report_label_no" name="report_label" value="report_label_no" onclick="show('select_report_label_no')" class="custom-control-input">
+                  <label class="custom-control-label" for="report_label_no">No</label>
+                </div>
+                <div id="select_report_label_no" style="display: none;">
+                    <div class="form-group">
+                      <label class="col-form-label" for="report_label_value_no">Insert, if exists, the section identifying attribute</label>
+                      <input type="text" class="form-control" name="report_label_no" id="report_label_value_no">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label" for="image_tag">Image files (if your reports do not have images associated, leave this field blank)</label>
+                  <input type="text" class="form-control" name="image_tag" id="image_tag">
+                </div>
+                 Does your report tag contain an attribute <strong>id</strong> identifying each image?
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="image_file_yes" name="image_file" value="yes" class="custom-control-input" checked="">
+                  <label class="custom-control-label" for="image_file_yes">Yes</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="image_file_no" name="image_file" value="image_file_no" onclick="show('select_image_file_no')" class="custom-control-input">
+                  <label class="custom-control-label" for="image_file_no">No</label>
+                </div>
+                <div id="select_image_file_no" style="display: none;">
+                    <div class="form-group">
+                      <label class="col-form-label" for="image_file_value_no">Insert, if exists, the image file identifying attribute</label>
+                      <input type="text" class="form-control" name="image_file_no" id="image_file_value_no">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label" for="roi_tag">Region of Interest (If there are no regions of interests annotated in the images, leave this filed blank)</label>
+                  <input type="text" class="form-control" name="roi_tag" id="roi_tag">
+                </div>
+                Does your region of interest tag contain an attribute <strong>coordinate</strong> identifying each ROI coordinate?
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="roi_yes" name="roi_coordinates" value="yes" class="custom-control-input" checked="">
+                  <label class="custom-control-label" for="roi_yes">Yes</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="roi_no" name="roi_coordinates" value="roi_no" onclick="show('select_roi_no')" class="custom-control-input">
+                  <label class="custom-control-label" for="roi_no">No</label>
+                </div>
+                <div id="select_roi_no" style="display: none;">
+                    <div class="form-group">
+                      <label class="col-form-label" for="roi_value_no">Insert the ROI coordinate identifying attribute</label>
+                      <input type="text" class="form-control" name="roi_value_no" id="roi_value_no">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label" for="term_tag">Annotated terms (If your report do not contain annotated terms, leave this field blank)</label>
+                  <input type="text" class="form-control" name="term_tag" id="term_tag">
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label" for="abbv_tag">Employed Abbreviations(If your report do not contain annotated terms, leave this field blank)</label>
+                  <input type="text" class="form-control" name="abbv_tag" id="abbv_tag">
+                </div>
+            </div>
+        </div>
+        <div class="buttonHolder" style="margin-top:-50px;margin-bottom: 40px;">
+         <button type="submit" name="generate_cases" value="yes" class="btn btn-primary">Generate cases</button>
+        <button type="submit"  class="btn btn-secondary" onclick="goBack()">Go Back</button>
+        </div>
+            <script>
+             $("#cbr_form").submit(function(event) {
+                    $("#pageloader").show();
+                    $(form).submit();
+                });
+         </script>
+        <script>
+                function goBack() {
+                  window.history.go(-1);
+                }
+         </script>
+        </form>
+<footer>
+<p style="margin-left: 20px;">This framework was developed as part of the AI4EU project. Further documentation can be
+found <a href="static/docs/index.html">here</a> </p>
+    <div class="form-group-image-file" style="margin:20px;">
+  <img alt="Qries" src="static/images/Logo_OEG.gif"
+         width=150"  align="left" style="margin-left:30px;">
+
+	<img alt="Qries" src="https://www.ai4eu.eu/themes/custom/ai4eu/logo.svg"
+		 width=200" align="right" style="margin:20px;margin-left: 65%;">
+        </div>
+</footer>
+</body>
+</html>

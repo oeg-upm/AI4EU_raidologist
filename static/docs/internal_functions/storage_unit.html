@@ -1,0 +1,1717 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>internal_functions.storage_unit API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>internal_functions.storage_unit</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import itertools
+import sys
+import os
+import xml.etree.ElementTree as ET
+import datetime
+import pickle
+import pandas as pd
+import numpy as np
+from scipy import spatial
+import operator
+from ftplib import FTP
+import pysftp
+import shutil
+
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+import internal_functions
+
+
+# De momento vamos a centrarnos en local y ya daremos el salto
+
+
+def _save_obj(obj, name):
+    with open(name + &#39;.pkl&#39;, &#39;wb&#39;) as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+
+def _load_obj(name):
+    with open(name + &#39;.pkl&#39;, &#39;rb&#39;) as f:
+        return pickle.load(f)
+
+
+def _ftp_upload(ftp_data, path, object, remotefile, extension=&#39;.pkl&#39;):
+    ftp = FTP(ftp_data[&#39;server&#39;])
+    ftp.login(ftp_data[&#39;username&#39;], ftp_data[&#39;password&#39;])
+    ftp.cwd(path)
+    if extension == &#39;.pkl&#39;:
+        _save_obj(object, &#39;externals/tmp/tmp_file&#39;)
+        fp = open(&#39;externals/tmp/tmp_file&#39; + extension, &#39;rb&#39;)
+    else:
+        fp = open(object, &#39;rb&#39;)
+    ftp.storbinary(&#39;STOR %s&#39; % remotefile, fp)
+    ftp.quit()
+
+
+def _ftp_download(ftp_data, path, filename, extension=&#39;.pkl&#39;):
+    ftp = FTP(ftp_data[&#39;server&#39;])
+    ftp.login(ftp_data[&#39;username&#39;], ftp_data[&#39;password&#39;])
+    ftp.cwd(path)
+
+    if extension == &#39;.pkl&#39;:
+        handle = open(&#39;externals/tmp/tmp_file&#39; + extension, &#39;wb&#39;)
+        ftp.retrbinary(&#39;RETR %s&#39; % filename + extension, handle.write, 8192)
+        ftp_file = _load_obj(&#39;externals/tmp/tmp_file&#39;)
+    else:
+        handle = open(&#39;externals/tmp/&#39; + filename, &#39;wb&#39;)
+        ftp.retrbinary(&#39;RETR %s&#39; % filename, handle.write, 8192)
+        ftp_file = open(&#39;externals/tmp/&#39;+filename, &#39;rb&#39;)
+    ftp.quit()
+    return ftp_file
+
+
+def _sftp_upload(sftp_data, path, object, filename, extension=&#39;.pkl&#39;):
+    sftp = pysftp.Connection(sftp_data[&#39;server&#39;], username=sftp_data[&#39;username&#39;], password=sftp_data[&#39;password&#39;])
+    sftp.cwd(path)
+    if extension == &#39;.pkl&#39;:
+        _save_obj(object, &#39;externals/tmp/tmp_file&#39;)
+        fp = &#39;externals/tmp/tmp_file&#39; + extension
+        sftp.put(localpath=fp, remotepath=filename + extension, preserve_mtime=True)
+    else:
+        fp = filename
+        remote_fp = filename.split(&#39;/&#39;)[-1]
+        sftp.put(localpath=fp, remotepath=remote_fp, preserve_mtime=True)
+
+    sftp.close()
+
+
+def _sftp_download(sftp_data, path, filename, extension=&#39;.pkl&#39;):
+    sftp = pysftp.Connection(sftp_data[&#39;server&#39;], username=sftp_data[&#39;username&#39;], password=sftp_data[&#39;password&#39;])
+    sftp.cwd(path)
+    if extension == &#39;.pkl&#39;:
+        local_name = &#39;externals/tmp/tmp_file&#39; + extension
+        sftp.get(filename + extension, local_name, preserve_mtime=True)
+        sftp_file = _load_obj(&#39;externals/tmp/tmp_file&#39;)
+    else:
+        sftp.get(filename, &#39;externals/tmp/&#39; + filename, preserve_mtime=True)
+        sftp_file = open(&#39;externals/tmp/&#39; + filename)
+    sftp.close()
+    return sftp_file
+
+
+def _parse_data(input_report, remote_server, parsing_criteria):
+    parsed_data = {&#39;report&#39;: &#34;&#34;, &#39;image_files&#39;: [], &#39;ne_terms&#39;: []}
+    image_list=[]
+    if remote_server[&#39;server_type&#39;] == &#39;ftp&#39;:
+        ftp = FTP(remote_server[&#39;server&#39;])
+        ftp.login(remote_server[&#39;username&#39;], remote_server[&#39;password&#39;])
+        ftp.cwd(parsing_criteria[&#39;image_folder&#39;])
+        image_list = ftp.nlst()
+        ftp.quit()
+    elif remote_server[&#39;server_type&#39;] == &#39;sftp&#39;:
+        sftp = pysftp.Connection(remote_server[&#39;server&#39;],
+                                 username=remote_server[&#39;username&#39;],
+                                 password=remote_server[&#39;password&#39;])
+        sftp.cwd(parsing_criteria[&#39;image_folder&#39;])
+        image_list = sftp.listdir()
+        sftp.close()
+    if parsing_criteria[&#39;format&#39;] == &#34;xml&#34;:
+        tree = ET.parse(input_report)
+        root = tree.getroot()
+        new_report = &#34;&#34;
+        for element in root.iter(parsing_criteria[&#39;report_headers&#39;]):
+            if parsing_criteria[&#39;report_label&#39;]:
+                new_report += &#34;###&#34; + element.attrib[parsing_criteria[&#39;report_label&#39;]] + &#34;\n&#34;
+            if element.text:
+                new_report += element.text + &#34;\n&#34;
+        parsed_data[&#39;report&#39;] = new_report
+        new_ner = []
+        if parsing_criteria[&#39;NE_headers&#39;]:
+            for i in range(len(parsing_criteria[&#39;NE_headers&#39;])):
+                for element in root.findall(parsing_criteria[&#39;NE_headers&#39;][i]):
+                    els = element.text.rstrip().split(&#39;/&#39;)[0]
+                    els = els.split(&#39;,&#39;)
+                    new_ner += els
+            parsed_data[&#39;ne_terms&#39;] = list(set(new_ner))
+        new_image = []
+        if parsing_criteria[&#39;image_header&#39;]:
+            for element in root.iter(parsing_criteria[&#39;image_header&#39;]):
+                for f in image_list:
+                    if element.attrib[parsing_criteria[&#39;image_label&#39;]] in f:
+                        new_image.append(f)
+                        break
+            parsed_data[&#39;image_files&#39;] = new_image
+
+    if parsing_criteria[&#39;format&#39;] == &#39;plain&#39;:
+        new_report = &#34;&#34;
+        report = open(input_report).read().rstrip().lstrip().split(&#39;\n&#39;)
+        if {&#39;FINDINGS&#39;, &#39;COMPARISON&#39;, &#39;INDICATION&#39;, &#39;IMPRESSION&#39;} &amp; set(report):
+            report_to_dict = internal_functions.section_string_to_dict(report)
+            for k, v in report_to_dict.items():
+                new_report += &#39;###&#39; + k + &#39;\n&#39;
+                new_report += v + &#39;\n&#39;
+        else:
+            new_report = &#39;\n&#39;.join(report)
+        parsed_data[&#39;report&#39;] = new_report
+        report_id = input_report.split(&#39;/&#39;)[-1].split(&#39;&#39;&#39;\\&#39;&#39;&#39;)[-1].split(&#39;_&#39;)[0]
+        new_image = []
+        for f in image_list:
+            if f.startswith(report_id):
+                new_image.append(f)
+        parsed_data[&#39;image_files&#39;] = new_image
+
+    return parsed_data
+
+
+def _create_case_df(case_path, remote_server=False):
+    if remote_server:
+        df = pd.DataFrame(columns=[&#39;Case_ID&#39;, &#39;Case_Location&#39;, &#39;Original_Location&#39;,
+                                   &#39;Image_Features&#39;, &#39;Doc_Embedding&#39;, &#39;NE_Detected&#39;,
+                                   &#39;Abbrv_#&#39;, &#39;Validation_Status&#39;, &#39;First_In&#39;, &#39;Last_Modified&#39;, &#39;Modified_By&#39;])
+    else:
+        df = pd.DataFrame(columns=[&#39;Case_ID&#39;, &#39;Case_Location&#39;, &#39;Original_Location&#39;,
+                                   &#39;Image_Features&#39;, &#39;Doc_Embedding&#39;, &#39;NE_Detected&#39;,
+                                   &#39;Abbrv_#&#39;, &#39;Validation_Status&#39;, &#39;First_In&#39;, &#39;Last_Modified&#39;])
+
+    pd.to_pickle(df, case_path, compression=&#39;zip&#39;)
+
+
+def _sync_case_df(server_data, local_case_path, remote_case_path):
+    remote_path = &#39;/&#39;.join(remote_case_path.split(&#39;/&#39;)[:-1])
+    if remote_path.endswith(&#39;.zip&#39;):
+        remote_path = &#34;&#34;
+    remote_file = remote_case_path.split(&#39;/&#39;)[-1]
+    if server_data[&#39;server_type&#39;] == &#39;ftp&#39;:
+        _ftp_upload(server_data, remote_path, local_case_path, remote_file, extension=&#39;.zip&#39;)
+    elif server_data[&#39;server_type&#39;] == &#39;sftp&#39;:
+        _sftp_upload(server_data, remote_path, None, local_case_path, extension=&#39;.zip&#39;)
+
+
+# Que formatos de datos vamos a considerar? XML y...?
+class Storage_Unit:
+    # Basic functions
+    def __init__(self):
+        self.case_host = &#34;&#34;
+        self.originals_host = &#34;&#34;
+        self.case_prefix = &#34;&#34;
+        self.data_format = &#34;&#34;
+        self.case_index_path = &#34;&#34;
+        self.remote_server = None
+        self.credentials = None
+        self.server_type = &#34;&#34;
+        self.real_case_index = &#34;&#34;
+
+    def set_remote_server(self, server_type, remote_server, username, password):
+        self.server_type = server_type
+        self.remote_server = remote_server
+        self.credentials = [username, password]
+
+    def set_storage_unit(self, case_host, originals_host, case_prefix, case_index_path):
+        self.case_host = case_host
+        self.case_prefix = case_prefix
+        self.originals_host = originals_host
+        # self.case_index_path=case_index_path
+        if case_index_path.endswith(&#39;.zip&#39;):
+            # If the file exists, we make a local copy, which is uploaded after each operation
+            if self.remote_server:
+                self.remote_case_index = case_index_path
+                case_folder = &#39;/&#39;.join(case_index_path.split(&#39;/&#39;)[:-1])
+                case_file = case_index_path.split(&#39;/&#39;)[-1]
+                if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                    index_file = _ftp_download(self.get_remote_server(), case_folder, case_file, extension=&#39;.zip&#39;)
+                elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                    index_file = _sftp_download(self.get_remote_server(), case_folder, case_file, extension=&#39;.zip&#39;)
+                index_file_name = index_file.name
+                index_file.close()
+                shutil.copy2(index_file_name, &#39;externals/&#39; + case_file)
+                self.case_index_path = &#39;externals/&#39; + case_file
+            else:
+                self.case_index_path = &#39;externals/&#39; + case_index_path
+        else:
+            _create_case_df(&#39;externals/&#39; + case_index_path, True)
+            self.case_index_path = &#39;externals/&#39; + case_index_path
+            self.remote_case_index = self.originals_host + &#39;/&#39; + case_index_path
+
+    def change_case_host(self, new_case_host):
+        self.case_host = new_case_host
+
+    def change_csv_path(self, new_case_index_path):
+        self.case_index_path = new_case_index_path
+
+    def get_storage_unit(self):
+        return self.case_host, self.originals_host, self.case_prefix, self.case_index_path
+
+    def get_originals_host(self):
+        return self.originals_host
+
+    def get_case_host(self):
+        return self.case_host
+
+    def get_remote_server(self):
+        return {&#39;server_type&#39;: self.server_type, &#39;server&#39;: self.remote_server,
+                &#39;username&#39;: self.credentials[0], &#39;password&#39;: self.credentials[1]}
+
+    def get_csv_path(self):
+        return self.case_index_path
+
+    def get_case_prefix(self):
+        return self.case_prefix
+
+    def get_remote_case_index(self):
+        return self.remote_case_index
+
+    ###Class functions
+
+    def dump_case(self, new_case):
+        &#34;&#34;&#34;Stores a created case in the system and adds its corresponding entry into the case index
+        INPUT: Case to dump&#34;&#34;&#34;
+        df = pd.read_pickle(self.get_csv_path())
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                            self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                             self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        else:
+            _save_obj(new_case, self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        im_vectors = []
+        if new_case.get_problem().get_image_file():
+            for i in new_case.get_problem().get_image_file():
+                im_vectors.append(internal_functions.image_feature_extraction(i))
+                remote_name = i.split(&#39;/&#39;)[-1]
+                if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                    _ftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, i, remote_name,
+                                extension=&#39;image&#39;)
+                elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                    _sftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, None, i,
+                                 extension=&#39;image&#39;)
+                new_case.get_problem().set_image_files([os.path.join(self.originals_host + &#39;/images/&#39;, remote_name)])
+                os.remove(i)
+        abbs = internal_functions.get_abbr_ratio(new_case.get_solution().get_section_report())
+        if self.remote_server:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_case.get_problem().get_term_list(), abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow(), self.get_remote_server()[&#39;username&#39;]]
+        else:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_case.get_problem().get_term_list(), abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow()]
+        df.loc[len(df)] = new_row
+        df.to_pickle(self.get_csv_path())
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def create_new_case(self, new_case, corrected_report=&#34;&#34;):
+        &#34;&#34;&#34;Creates and stores a new case.
+        If no manual solution is provided, it will be inferred automatically from the system and marked as &#39;pendant&#39;
+        INPUT: Input report [Image_files, Solution files]&#34;&#34;&#34;
+        if corrected_report:
+            new_sections = corrected_report
+        else:
+            new_sections = internal_functions.section_text(new_case.get_problem().get_report())
+        new_abbvs = internal_functions.disambiguate_abbreviation(new_case.get_solution().get_section_report())
+        new_ner = internal_functions.get_entities(new_case.get_problem().get_report(),
+                                                  new_case.get_problem().get_term_list())
+        new_case.get_problem().set_term_list(new_ner)
+        new_case.set_solution(new_sections=new_sections, new_abbvs=new_abbvs)
+        im_vectors = []
+        if new_case.get_problem().get_image_file():
+            for i in new_case.get_problem().get_image_file():
+                im_vectors.append(internal_functions.image_feature_extraction(i))
+                remote_name = i.split(&#39;/&#39;)[-1]
+                if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                    _ftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, i, remote_name,
+                                extension=&#39;image&#39;)
+                elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                    _sftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, None, i,
+                                 extension=&#39;image&#39;)
+                new_case.get_problem().set_image_files([os.path.join(self.originals_host + &#39;/images/&#39;, remote_name)])
+                os.remove(i)
+        abbs = internal_functions.get_abbr_ratio(new_case.get_problem().get_report(),
+                                                 new_case.get_problem().get_abbrs())
+        similar_cases = self.find_top_cases(new_case, {&#39;n&#39;: 3})
+        new_case.get_solution().set_related_cases(similar_cases)
+        df = pd.read_pickle(self.get_csv_path())
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                            self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                             self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        else:
+            _save_obj(new_case, self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+
+        if self.remote_server:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_ner, abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow(), self.get_remote_server()[&#39;username&#39;]]
+        else:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_ner, abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow()]
+        df.loc[len(df)] = new_row
+        df.to_pickle(self.get_csv_path())
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def create_case_set(self, parsing_criteria, report_list=&#39;&#39;):
+        &#34;&#34;&#34;Generates a set of cases from existing reports
+        INPUT: Parsing criteria [Report_list]&#34;&#34;&#34;
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                ftp = FTP(self.get_remote_server()[&#39;server&#39;])
+                ftp.login(self.get_remote_server()[&#39;username&#39;], self.get_remote_server()[&#39;password&#39;])
+                ftp.cwd(self.get_originals_host() + &#39;/reports/&#39;)
+                report_list = ftp.nlst()
+                ftp.quit()
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                sftp = pysftp.Connection(self.get_remote_server()[&#39;server&#39;],
+                                         username=self.get_remote_server()[&#39;username&#39;],
+                                         password=self.get_remote_server()[&#39;password&#39;])
+                sftp.cwd(self.get_originals_host() + &#39;/reports/&#39;)
+                report_list = sftp.listdir()
+                sftp.close()
+        for report in report_list:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                tmp_report = _ftp_download(self.get_remote_server(), self.get_originals_host() + &#39;/reports/&#39;, report,
+                                           extension=&#39;.txt&#39;)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                tmp_report = _sftp_download(self.get_remote_server(), self.get_originals_host() + &#39;/reports/&#39;, report,
+                                            extension=&#39;.txt&#39;)
+            tmp_report.close()
+            parsed_data = _parse_data(&#39;externals/tmp/&#39; + report, self.get_remote_server(), parsing_criteria)
+            os.remove(&#39;externals/tmp/&#39;+report)
+            # Returning the sectioned reports, if there are, and the name of the image files
+            new_case = internal_functions.Case()
+            new_case.set_problem(new_report=parsed_data[&#39;report&#39;],new_image=parsed_data[&#39;image_files&#39;])
+            report_sectioned = parsed_data[&#39;report&#39;].rstrip().lstrip().split(&#39;\n&#39;)
+            solution = &#34;&#34;
+            if bool({&#39;###FINDINGS&#39;, &#39;###COMPARISON&#39;, &#39;###INDICATION&#39;, &#39;###IMPRESSION&#39;} &amp; set(report_sectioned)):
+                solution = parsed_data[&#39;report&#39;]
+            self.create_new_case(new_case, solution)
+
+    def recover_single_case(self, case_ID):
+        &#34;&#34;&#34;Recovers a single case given its ID
+        INPUT: Case_ID
+        OUTPUT: The case object&#34;&#34;&#34;
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                return _ftp_download(self.get_remote_server(), self.get_case_host(), case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                return _sftp_download(self.get_remote_server(), self.get_case_host(), case_ID)
+
+        else:
+            return _load_obj(self.case_host + &#39;/&#39; + case_ID)
+
+    def get_case_entities(self, case_ID):
+        &#34;&#34;&#34;Retrieves the named entities detected within a case
+        INPUT: Case_ID
+        OUTPUT: Dictionary containing each detected entity and its type&#34;&#34;&#34;
+        df = pd.read_pickle(self.case_index_path)
+        return df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;NE_Detected&#39;].to_dict()
+
+    def change_case_solution(self, case_ID, new_report, change_validation=&#39;&#39;):
+        &#34;&#34;&#34;Changes the stored solution of a given case.
+        INPUT: Case_ID of the case to change, New Case Solution and, optionally, a new validation value (this should only be changed by an expert)&#34;&#34;&#34;
+        case = self.recover_single_case(case_ID)
+        case.get_solution().set_section_report(new_report)
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        else:
+            _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+        df = pd.read_pickle(self.case_index_path)
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+        if change_validation:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Validation_Status&#39;] = change_validation
+        if self.remote_server:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+        df.to_pickle(self.case_index_path)
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def update_related_entities(self, case_ID, new_related):
+        &#34;&#34;&#34;Updates the stored related entities of a given case
+        INPUT: Case_ID, List of related cases&#34;&#34;&#34;
+        case = self.recover_single_case(case_ID)
+        case.get_solution().set_suggested_ner(new_related)
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        else:
+            _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+        df = pd.read_pickle(self.case_index_path)
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+        if self.remote_server:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+        df.to_pickle(self.case_index_path)
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def update_related_cases(self, case_ID, new_related):
+        &#34;&#34;&#34;Updates the stored related cases of a given case
+        INPUT: Case_ID, List of related cases&#34;&#34;&#34;
+        case = self.recover_single_case(case_ID)
+        case.get_solution().set_related_cases(new_related)
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        else:
+            _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+        df = pd.read_pickle(self.case_index_path)
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+        if self.remote_server:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+        df.to_pickle(self.case_index_path)
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def link_similar_n_cases(self):
+        df = pd.read_pickle(self.case_index_path)
+        for i, row in df.iterrows():
+            i1 = row[&#39;Image_Features&#39;]
+            matches_i1 = {}
+            for j, j_row in df.iterrows():
+                cum = []
+                for (i_case, i_potential) in itertools.product(i1, j_row[&#39;Image_Features&#39;]):
+                    cum.append(1 - spatial.distance.cosine(i_case, i_potential))
+                if cum != []:
+                    matches_i1[j] = np.mean(cum)
+                else:
+                    matches_i1[j] = 1
+            i2 = row[&#39;Doc_Embedding&#39;]
+            matches_i2 = {j: 1 - spatial.distance.cosine(i2, j_row[&#39;Doc_Embedding&#39;]) for j, j_row in df.iterrows()}
+            i3 = row[&#39;NE_Detected&#39;]
+            matches_i3 = {j: list(set(i3) &amp; set(j_row[&#39;NE_Detected&#39;])) for j, j_row in df.iterrows()}
+            matches_total = {j_row[&#39;Case_ID&#39;]: np.mean([matches_i1[j], matches_i2[j], len(matches_i3[j])]) for j, j_row
+                             in df.iterrows()}
+            sorted_d = sorted(matches_total.items(), key=operator.itemgetter(1), reverse=True)
+            cases_to_input = sorted_d[1:6]
+            cases_to_input = [a_tuple[0] for a_tuple in cases_to_input]
+            self.update_related_cases(row[&#39;Case_ID&#39;], cases_to_input)
+            new_entities = internal_functions.get_case_related_entities(self, cases_to_input)
+            self.update_related_entities(row[&#39;Case_ID&#39;], new_entities)
+
+    def find_top_cases(self, case, input_criteria=None):
+        &#34;&#34;&#34;Finds the most similar N cases to a given case according to the provided criteria
+        INPUT: Present case, [Search criteria (If no input criteria is provided, the default values are used)]
+        OUTPUT: Dictionary with the retrieved cases and their metrics with respect to the present case&#34;&#34;&#34;
+        if input_criteria is None:
+            criteria = {&#39;i1&#39;: -1, &#39;i2&#39;: -1, &#39;i3&#39;: [], &#39;i4&#39;: -1, &#39;n&#39;: -1, &#39;query_type&#39;: &#39;or&#39;, &#39;discarded_cases&#39;: []}
+        else:
+            default_criteria = {&#39;i1&#39;: -1, &#39;i2&#39;: -1, &#39;i3&#39;: [], &#39;i4&#39;: -1, &#39;n&#39;: -1, &#39;query_type&#39;: &#39;or&#39;,
+                                &#39;discarded_cases&#39;: []}
+            criteria = default_criteria.copy()
+            criteria.update(input_criteria)
+
+        i1_value = case.get_problem().get_image_file()
+        roi_value = case.get_problem().get_roi_coordinates()
+        i2_value = case.get_problem().get_report()
+        i3_value = case.get_problem().get_term_list()
+        case_im_embeddings = []
+        for i in i1_value:
+            case_im_embeddings.append(internal_functions.image_feature_extraction(i, roi=roi_value))
+        case_doc_embedding = internal_functions.get_document_embedding(i2_value)
+        case_terms = internal_functions.get_entities(i2_value, i3_value)
+        if not case_terms:
+            case_terms = {&#34;Empty&#34;: &#34;empty&#34;}
+        df = pd.read_pickle(self.case_index_path)
+        potential_cases = []
+        if not criteria[&#39;discarded_cases&#39;]:
+            case_list = df
+        else:
+            case_list = df[(~df.Case_ID.isin(criteria[&#39;discarded_cases&#39;]))]
+        for i, row in case_list.iterrows():
+            if row[&#39;Validation_Status&#39;] == &#39;Rejected&#39;:
+                continue
+            metrics = {&#39;i1&#39;: 1, &#39;i2&#39;: 1, &#39;i3&#39;: [], &#39;i4&#39;: 1}
+            i1_case = row[&#39;Image_Features&#39;]
+            i2_case = row[&#39;Doc_Embedding&#39;]
+            i3_case = row[&#39;NE_Detected&#39;]
+            i4_case = row[&#39;Abbrv_#&#39;]
+            # First, we compare the images
+            if i1_value:
+                metrics[&#39;i1&#39;] = np.mean([1 - spatial.distance.cosine(i_case, i_potential) for (i_case, i_potential) in
+                                         itertools.product(i1_case, case_im_embeddings)])
+            metrics[&#39;i2&#39;] = 1 - spatial.distance.cosine(np.array(case_doc_embedding), np.array(i2_case))
+            metrics[&#39;i3&#39;] = list(set(i3_case.keys()) &amp; set(case_terms.keys()))
+            if not metrics[&#39;i3&#39;]:
+                metrics[&#39;i3&#39;] = [&#34;&#34;]
+            metrics[&#39;i4&#39;] = i4_case
+            # Then, we check if the conditions are joint or disjoint
+            if criteria[&#39;query_type&#39;] == &#39;and&#39;:
+                if metrics[&#39;i1&#39;] &gt;= criteria[&#39;i1&#39;] and metrics[&#39;i2&#39;] &gt;= criteria[&#39;i2&#39;] and \
+                        len(metrics[&#39;i3&#39;]) &gt;= len(criteria[&#39;i3&#39;]) and metrics[&#39;i4&#39;] &gt;= criteria[&#39;i4&#39;]:
+                    metrics[&#39;total&#39;] = np.mean(
+                        [np.mean(metrics[&#39;i1&#39;]), metrics[&#39;i2&#39;], float(len(metrics[&#39;i3&#39;]) / len(case_terms.keys())),
+                         metrics[&#39;i4&#39;]])
+                    metrics[&#39;Case_ID&#39;] = row[&#39;Case_ID&#39;]
+                    potential_cases.append(metrics)
+
+            elif criteria[&#39;query_type&#39;] == &#39;or&#39;:
+                if metrics[&#39;i1&#39;] &gt;= criteria[&#39;i1&#39;] or metrics[&#39;i2&#39;] &gt;= criteria[&#39;i2&#39;] or \
+                        metrics[&#39;i3&#39;] or metrics[&#39;i4&#39;] &gt;= criteria[&#39;i4&#39;]:
+                    metrics[&#39;total&#39;] = np.mean(
+                        [np.mean(metrics[&#39;i1&#39;]), metrics[&#39;i2&#39;], float(len(metrics[&#39;i3&#39;]) / len(case_terms.keys())),
+                         metrics[&#39;i4&#39;]])
+                    metrics[&#39;Case_ID&#39;] = row[&#39;Case_ID&#39;]
+                    potential_cases.append(metrics)
+
+        if criteria[&#39;n&#39;] != -1 and criteria[&#39;n&#39;] &lt;= len(potential_cases):
+            newlist = sorted(potential_cases, key=operator.itemgetter(&#39;total&#39;), reverse=True)
+            potential_cases = newlist[:criteria[&#39;n&#39;]]
+
+        return potential_cases
+
+    def download_image(self,image_file):
+        &#34;&#34;&#34;Downloads the required image file from the server, if there is, and stores it into the tmp folder
+        INPUT: Name of the image file to download.&#34;&#34;&#34;
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_download(self.get_remote_server(), self.get_originals_host()+&#39;/images/&#39;
+                                       , image_file, extension=&#39;image&#39;)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_download(self.get_remote_server(), self.get_originals_host()+&#39;/images/&#39;,
+                                        image_file, extension=&#39;image&#39;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="internal_functions.storage_unit.Storage_Unit"><code class="flex name class">
+<span>class <span class="ident">Storage_Unit</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Storage_Unit:
+    # Basic functions
+    def __init__(self):
+        self.case_host = &#34;&#34;
+        self.originals_host = &#34;&#34;
+        self.case_prefix = &#34;&#34;
+        self.data_format = &#34;&#34;
+        self.case_index_path = &#34;&#34;
+        self.remote_server = None
+        self.credentials = None
+        self.server_type = &#34;&#34;
+        self.real_case_index = &#34;&#34;
+
+    def set_remote_server(self, server_type, remote_server, username, password):
+        self.server_type = server_type
+        self.remote_server = remote_server
+        self.credentials = [username, password]
+
+    def set_storage_unit(self, case_host, originals_host, case_prefix, case_index_path):
+        self.case_host = case_host
+        self.case_prefix = case_prefix
+        self.originals_host = originals_host
+        # self.case_index_path=case_index_path
+        if case_index_path.endswith(&#39;.zip&#39;):
+            # If the file exists, we make a local copy, which is uploaded after each operation
+            if self.remote_server:
+                self.remote_case_index = case_index_path
+                case_folder = &#39;/&#39;.join(case_index_path.split(&#39;/&#39;)[:-1])
+                case_file = case_index_path.split(&#39;/&#39;)[-1]
+                if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                    index_file = _ftp_download(self.get_remote_server(), case_folder, case_file, extension=&#39;.zip&#39;)
+                elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                    index_file = _sftp_download(self.get_remote_server(), case_folder, case_file, extension=&#39;.zip&#39;)
+                index_file_name = index_file.name
+                index_file.close()
+                shutil.copy2(index_file_name, &#39;externals/&#39; + case_file)
+                self.case_index_path = &#39;externals/&#39; + case_file
+            else:
+                self.case_index_path = &#39;externals/&#39; + case_index_path
+        else:
+            _create_case_df(&#39;externals/&#39; + case_index_path, True)
+            self.case_index_path = &#39;externals/&#39; + case_index_path
+            self.remote_case_index = self.originals_host + &#39;/&#39; + case_index_path
+
+    def change_case_host(self, new_case_host):
+        self.case_host = new_case_host
+
+    def change_csv_path(self, new_case_index_path):
+        self.case_index_path = new_case_index_path
+
+    def get_storage_unit(self):
+        return self.case_host, self.originals_host, self.case_prefix, self.case_index_path
+
+    def get_originals_host(self):
+        return self.originals_host
+
+    def get_case_host(self):
+        return self.case_host
+
+    def get_remote_server(self):
+        return {&#39;server_type&#39;: self.server_type, &#39;server&#39;: self.remote_server,
+                &#39;username&#39;: self.credentials[0], &#39;password&#39;: self.credentials[1]}
+
+    def get_csv_path(self):
+        return self.case_index_path
+
+    def get_case_prefix(self):
+        return self.case_prefix
+
+    def get_remote_case_index(self):
+        return self.remote_case_index
+
+    ###Class functions
+
+    def dump_case(self, new_case):
+        &#34;&#34;&#34;Stores a created case in the system and adds its corresponding entry into the case index
+        INPUT: Case to dump&#34;&#34;&#34;
+        df = pd.read_pickle(self.get_csv_path())
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                            self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                             self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        else:
+            _save_obj(new_case, self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        im_vectors = []
+        if new_case.get_problem().get_image_file():
+            for i in new_case.get_problem().get_image_file():
+                im_vectors.append(internal_functions.image_feature_extraction(i))
+                remote_name = i.split(&#39;/&#39;)[-1]
+                if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                    _ftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, i, remote_name,
+                                extension=&#39;image&#39;)
+                elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                    _sftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, None, i,
+                                 extension=&#39;image&#39;)
+                new_case.get_problem().set_image_files([os.path.join(self.originals_host + &#39;/images/&#39;, remote_name)])
+                os.remove(i)
+        abbs = internal_functions.get_abbr_ratio(new_case.get_solution().get_section_report())
+        if self.remote_server:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_case.get_problem().get_term_list(), abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow(), self.get_remote_server()[&#39;username&#39;]]
+        else:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_case.get_problem().get_term_list(), abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow()]
+        df.loc[len(df)] = new_row
+        df.to_pickle(self.get_csv_path())
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def create_new_case(self, new_case, corrected_report=&#34;&#34;):
+        &#34;&#34;&#34;Creates and stores a new case.
+        If no manual solution is provided, it will be inferred automatically from the system and marked as &#39;pendant&#39;
+        INPUT: Input report [Image_files, Solution files]&#34;&#34;&#34;
+        if corrected_report:
+            new_sections = corrected_report
+        else:
+            new_sections = internal_functions.section_text(new_case.get_problem().get_report())
+        new_abbvs = internal_functions.disambiguate_abbreviation(new_case.get_solution().get_section_report())
+        new_ner = internal_functions.get_entities(new_case.get_problem().get_report(),
+                                                  new_case.get_problem().get_term_list())
+        new_case.get_problem().set_term_list(new_ner)
+        new_case.set_solution(new_sections=new_sections, new_abbvs=new_abbvs)
+        im_vectors = []
+        if new_case.get_problem().get_image_file():
+            for i in new_case.get_problem().get_image_file():
+                im_vectors.append(internal_functions.image_feature_extraction(i))
+                remote_name = i.split(&#39;/&#39;)[-1]
+                if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                    _ftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, i, remote_name,
+                                extension=&#39;image&#39;)
+                elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                    _sftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, None, i,
+                                 extension=&#39;image&#39;)
+                new_case.get_problem().set_image_files([os.path.join(self.originals_host + &#39;/images/&#39;, remote_name)])
+                os.remove(i)
+        abbs = internal_functions.get_abbr_ratio(new_case.get_problem().get_report(),
+                                                 new_case.get_problem().get_abbrs())
+        similar_cases = self.find_top_cases(new_case, {&#39;n&#39;: 3})
+        new_case.get_solution().set_related_cases(similar_cases)
+        df = pd.read_pickle(self.get_csv_path())
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                            self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                             self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        else:
+            _save_obj(new_case, self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+
+        if self.remote_server:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_ner, abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow(), self.get_remote_server()[&#39;username&#39;]]
+        else:
+            new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                       self.get_originals_host(), im_vectors,
+                       internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                       new_ner, abbs, &#39;Pendant&#39;,
+                       datetime.datetime.utcnow(), datetime.datetime.utcnow()]
+        df.loc[len(df)] = new_row
+        df.to_pickle(self.get_csv_path())
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def create_case_set(self, parsing_criteria, report_list=&#39;&#39;):
+        &#34;&#34;&#34;Generates a set of cases from existing reports
+        INPUT: Parsing criteria [Report_list]&#34;&#34;&#34;
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                ftp = FTP(self.get_remote_server()[&#39;server&#39;])
+                ftp.login(self.get_remote_server()[&#39;username&#39;], self.get_remote_server()[&#39;password&#39;])
+                ftp.cwd(self.get_originals_host() + &#39;/reports/&#39;)
+                report_list = ftp.nlst()
+                ftp.quit()
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                sftp = pysftp.Connection(self.get_remote_server()[&#39;server&#39;],
+                                         username=self.get_remote_server()[&#39;username&#39;],
+                                         password=self.get_remote_server()[&#39;password&#39;])
+                sftp.cwd(self.get_originals_host() + &#39;/reports/&#39;)
+                report_list = sftp.listdir()
+                sftp.close()
+        for report in report_list:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                tmp_report = _ftp_download(self.get_remote_server(), self.get_originals_host() + &#39;/reports/&#39;, report,
+                                           extension=&#39;.txt&#39;)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                tmp_report = _sftp_download(self.get_remote_server(), self.get_originals_host() + &#39;/reports/&#39;, report,
+                                            extension=&#39;.txt&#39;)
+            tmp_report.close()
+            parsed_data = _parse_data(&#39;externals/tmp/&#39; + report, self.get_remote_server(), parsing_criteria)
+            os.remove(&#39;externals/tmp/&#39;+report)
+            # Returning the sectioned reports, if there are, and the name of the image files
+            new_case = internal_functions.Case()
+            new_case.set_problem(new_report=parsed_data[&#39;report&#39;],new_image=parsed_data[&#39;image_files&#39;])
+            report_sectioned = parsed_data[&#39;report&#39;].rstrip().lstrip().split(&#39;\n&#39;)
+            solution = &#34;&#34;
+            if bool({&#39;###FINDINGS&#39;, &#39;###COMPARISON&#39;, &#39;###INDICATION&#39;, &#39;###IMPRESSION&#39;} &amp; set(report_sectioned)):
+                solution = parsed_data[&#39;report&#39;]
+            self.create_new_case(new_case, solution)
+
+    def recover_single_case(self, case_ID):
+        &#34;&#34;&#34;Recovers a single case given its ID
+        INPUT: Case_ID
+        OUTPUT: The case object&#34;&#34;&#34;
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                return _ftp_download(self.get_remote_server(), self.get_case_host(), case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                return _sftp_download(self.get_remote_server(), self.get_case_host(), case_ID)
+
+        else:
+            return _load_obj(self.case_host + &#39;/&#39; + case_ID)
+
+    def get_case_entities(self, case_ID):
+        &#34;&#34;&#34;Retrieves the named entities detected within a case
+        INPUT: Case_ID
+        OUTPUT: Dictionary containing each detected entity and its type&#34;&#34;&#34;
+        df = pd.read_pickle(self.case_index_path)
+        return df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;NE_Detected&#39;].to_dict()
+
+    def change_case_solution(self, case_ID, new_report, change_validation=&#39;&#39;):
+        &#34;&#34;&#34;Changes the stored solution of a given case.
+        INPUT: Case_ID of the case to change, New Case Solution and, optionally, a new validation value (this should only be changed by an expert)&#34;&#34;&#34;
+        case = self.recover_single_case(case_ID)
+        case.get_solution().set_section_report(new_report)
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        else:
+            _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+        df = pd.read_pickle(self.case_index_path)
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+        if change_validation:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Validation_Status&#39;] = change_validation
+        if self.remote_server:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+        df.to_pickle(self.case_index_path)
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def update_related_entities(self, case_ID, new_related):
+        &#34;&#34;&#34;Updates the stored related entities of a given case
+        INPUT: Case_ID, List of related cases&#34;&#34;&#34;
+        case = self.recover_single_case(case_ID)
+        case.get_solution().set_suggested_ner(new_related)
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        else:
+            _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+        df = pd.read_pickle(self.case_index_path)
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+        if self.remote_server:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+        df.to_pickle(self.case_index_path)
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def update_related_cases(self, case_ID, new_related):
+        &#34;&#34;&#34;Updates the stored related cases of a given case
+        INPUT: Case_ID, List of related cases&#34;&#34;&#34;
+        case = self.recover_single_case(case_ID)
+        case.get_solution().set_related_cases(new_related)
+        if self.remote_server:
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        else:
+            _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+        df = pd.read_pickle(self.case_index_path)
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+        if self.remote_server:
+            df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+        df.to_pickle(self.case_index_path)
+        if self.remote_server:
+            _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())
+
+    def link_similar_n_cases(self):
+        df = pd.read_pickle(self.case_index_path)
+        for i, row in df.iterrows():
+            i1 = row[&#39;Image_Features&#39;]
+            matches_i1 = {}
+            for j, j_row in df.iterrows():
+                cum = []
+                for (i_case, i_potential) in itertools.product(i1, j_row[&#39;Image_Features&#39;]):
+                    cum.append(1 - spatial.distance.cosine(i_case, i_potential))
+                if cum != []:
+                    matches_i1[j] = np.mean(cum)
+                else:
+                    matches_i1[j] = 1
+            i2 = row[&#39;Doc_Embedding&#39;]
+            matches_i2 = {j: 1 - spatial.distance.cosine(i2, j_row[&#39;Doc_Embedding&#39;]) for j, j_row in df.iterrows()}
+            i3 = row[&#39;NE_Detected&#39;]
+            matches_i3 = {j: list(set(i3) &amp; set(j_row[&#39;NE_Detected&#39;])) for j, j_row in df.iterrows()}
+            matches_total = {j_row[&#39;Case_ID&#39;]: np.mean([matches_i1[j], matches_i2[j], len(matches_i3[j])]) for j, j_row
+                             in df.iterrows()}
+            sorted_d = sorted(matches_total.items(), key=operator.itemgetter(1), reverse=True)
+            cases_to_input = sorted_d[1:6]
+            cases_to_input = [a_tuple[0] for a_tuple in cases_to_input]
+            self.update_related_cases(row[&#39;Case_ID&#39;], cases_to_input)
+            new_entities = internal_functions.get_case_related_entities(self, cases_to_input)
+            self.update_related_entities(row[&#39;Case_ID&#39;], new_entities)
+
+    def find_top_cases(self, case, input_criteria=None):
+        &#34;&#34;&#34;Finds the most similar N cases to a given case according to the provided criteria
+        INPUT: Present case, [Search criteria (If no input criteria is provided, the default values are used)]
+        OUTPUT: Dictionary with the retrieved cases and their metrics with respect to the present case&#34;&#34;&#34;
+        if input_criteria is None:
+            criteria = {&#39;i1&#39;: -1, &#39;i2&#39;: -1, &#39;i3&#39;: [], &#39;i4&#39;: -1, &#39;n&#39;: -1, &#39;query_type&#39;: &#39;or&#39;, &#39;discarded_cases&#39;: []}
+        else:
+            default_criteria = {&#39;i1&#39;: -1, &#39;i2&#39;: -1, &#39;i3&#39;: [], &#39;i4&#39;: -1, &#39;n&#39;: -1, &#39;query_type&#39;: &#39;or&#39;,
+                                &#39;discarded_cases&#39;: []}
+            criteria = default_criteria.copy()
+            criteria.update(input_criteria)
+
+        i1_value = case.get_problem().get_image_file()
+        roi_value = case.get_problem().get_roi_coordinates()
+        i2_value = case.get_problem().get_report()
+        i3_value = case.get_problem().get_term_list()
+        case_im_embeddings = []
+        for i in i1_value:
+            case_im_embeddings.append(internal_functions.image_feature_extraction(i, roi=roi_value))
+        case_doc_embedding = internal_functions.get_document_embedding(i2_value)
+        case_terms = internal_functions.get_entities(i2_value, i3_value)
+        if not case_terms:
+            case_terms = {&#34;Empty&#34;: &#34;empty&#34;}
+        df = pd.read_pickle(self.case_index_path)
+        potential_cases = []
+        if not criteria[&#39;discarded_cases&#39;]:
+            case_list = df
+        else:
+            case_list = df[(~df.Case_ID.isin(criteria[&#39;discarded_cases&#39;]))]
+        for i, row in case_list.iterrows():
+            if row[&#39;Validation_Status&#39;] == &#39;Rejected&#39;:
+                continue
+            metrics = {&#39;i1&#39;: 1, &#39;i2&#39;: 1, &#39;i3&#39;: [], &#39;i4&#39;: 1}
+            i1_case = row[&#39;Image_Features&#39;]
+            i2_case = row[&#39;Doc_Embedding&#39;]
+            i3_case = row[&#39;NE_Detected&#39;]
+            i4_case = row[&#39;Abbrv_#&#39;]
+            # First, we compare the images
+            if i1_value:
+                metrics[&#39;i1&#39;] = np.mean([1 - spatial.distance.cosine(i_case, i_potential) for (i_case, i_potential) in
+                                         itertools.product(i1_case, case_im_embeddings)])
+            metrics[&#39;i2&#39;] = 1 - spatial.distance.cosine(np.array(case_doc_embedding), np.array(i2_case))
+            metrics[&#39;i3&#39;] = list(set(i3_case.keys()) &amp; set(case_terms.keys()))
+            if not metrics[&#39;i3&#39;]:
+                metrics[&#39;i3&#39;] = [&#34;&#34;]
+            metrics[&#39;i4&#39;] = i4_case
+            # Then, we check if the conditions are joint or disjoint
+            if criteria[&#39;query_type&#39;] == &#39;and&#39;:
+                if metrics[&#39;i1&#39;] &gt;= criteria[&#39;i1&#39;] and metrics[&#39;i2&#39;] &gt;= criteria[&#39;i2&#39;] and \
+                        len(metrics[&#39;i3&#39;]) &gt;= len(criteria[&#39;i3&#39;]) and metrics[&#39;i4&#39;] &gt;= criteria[&#39;i4&#39;]:
+                    metrics[&#39;total&#39;] = np.mean(
+                        [np.mean(metrics[&#39;i1&#39;]), metrics[&#39;i2&#39;], float(len(metrics[&#39;i3&#39;]) / len(case_terms.keys())),
+                         metrics[&#39;i4&#39;]])
+                    metrics[&#39;Case_ID&#39;] = row[&#39;Case_ID&#39;]
+                    potential_cases.append(metrics)
+
+            elif criteria[&#39;query_type&#39;] == &#39;or&#39;:
+                if metrics[&#39;i1&#39;] &gt;= criteria[&#39;i1&#39;] or metrics[&#39;i2&#39;] &gt;= criteria[&#39;i2&#39;] or \
+                        metrics[&#39;i3&#39;] or metrics[&#39;i4&#39;] &gt;= criteria[&#39;i4&#39;]:
+                    metrics[&#39;total&#39;] = np.mean(
+                        [np.mean(metrics[&#39;i1&#39;]), metrics[&#39;i2&#39;], float(len(metrics[&#39;i3&#39;]) / len(case_terms.keys())),
+                         metrics[&#39;i4&#39;]])
+                    metrics[&#39;Case_ID&#39;] = row[&#39;Case_ID&#39;]
+                    potential_cases.append(metrics)
+
+        if criteria[&#39;n&#39;] != -1 and criteria[&#39;n&#39;] &lt;= len(potential_cases):
+            newlist = sorted(potential_cases, key=operator.itemgetter(&#39;total&#39;), reverse=True)
+            potential_cases = newlist[:criteria[&#39;n&#39;]]
+
+        return potential_cases
+
+    def download_image(self,image_file):
+        &#34;&#34;&#34;Downloads the required image file from the server, if there is, and stores it into the tmp folder
+        INPUT: Name of the image file to download.&#34;&#34;&#34;
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_download(self.get_remote_server(), self.get_originals_host()+&#39;/images/&#39;
+                                       , image_file, extension=&#39;image&#39;)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_download(self.get_remote_server(), self.get_originals_host()+&#39;/images/&#39;,
+                                        image_file, extension=&#39;image&#39;)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="internal_functions.storage_unit.Storage_Unit.change_case_host"><code class="name flex">
+<span>def <span class="ident">change_case_host</span></span>(<span>self, new_case_host)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def change_case_host(self, new_case_host):
+    self.case_host = new_case_host</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.change_case_solution"><code class="name flex">
+<span>def <span class="ident">change_case_solution</span></span>(<span>self, case_ID, new_report, change_validation='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes the stored solution of a given case.
+INPUT: Case_ID of the case to change, New Case Solution and, optionally, a new validation value (this should only be changed by an expert)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def change_case_solution(self, case_ID, new_report, change_validation=&#39;&#39;):
+    &#34;&#34;&#34;Changes the stored solution of a given case.
+    INPUT: Case_ID of the case to change, New Case Solution and, optionally, a new validation value (this should only be changed by an expert)&#34;&#34;&#34;
+    case = self.recover_single_case(case_ID)
+    case.get_solution().set_section_report(new_report)
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+    else:
+        _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+    df = pd.read_pickle(self.case_index_path)
+    df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+    if change_validation:
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Validation_Status&#39;] = change_validation
+    if self.remote_server:
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+    df.to_pickle(self.case_index_path)
+    if self.remote_server:
+        _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.change_csv_path"><code class="name flex">
+<span>def <span class="ident">change_csv_path</span></span>(<span>self, new_case_index_path)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def change_csv_path(self, new_case_index_path):
+    self.case_index_path = new_case_index_path</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.create_case_set"><code class="name flex">
+<span>def <span class="ident">create_case_set</span></span>(<span>self, parsing_criteria, report_list='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates a set of cases from existing reports
+INPUT: Parsing criteria [Report_list]</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_case_set(self, parsing_criteria, report_list=&#39;&#39;):
+    &#34;&#34;&#34;Generates a set of cases from existing reports
+    INPUT: Parsing criteria [Report_list]&#34;&#34;&#34;
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            ftp = FTP(self.get_remote_server()[&#39;server&#39;])
+            ftp.login(self.get_remote_server()[&#39;username&#39;], self.get_remote_server()[&#39;password&#39;])
+            ftp.cwd(self.get_originals_host() + &#39;/reports/&#39;)
+            report_list = ftp.nlst()
+            ftp.quit()
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            sftp = pysftp.Connection(self.get_remote_server()[&#39;server&#39;],
+                                     username=self.get_remote_server()[&#39;username&#39;],
+                                     password=self.get_remote_server()[&#39;password&#39;])
+            sftp.cwd(self.get_originals_host() + &#39;/reports/&#39;)
+            report_list = sftp.listdir()
+            sftp.close()
+    for report in report_list:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            tmp_report = _ftp_download(self.get_remote_server(), self.get_originals_host() + &#39;/reports/&#39;, report,
+                                       extension=&#39;.txt&#39;)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            tmp_report = _sftp_download(self.get_remote_server(), self.get_originals_host() + &#39;/reports/&#39;, report,
+                                        extension=&#39;.txt&#39;)
+        tmp_report.close()
+        parsed_data = _parse_data(&#39;externals/tmp/&#39; + report, self.get_remote_server(), parsing_criteria)
+        os.remove(&#39;externals/tmp/&#39;+report)
+        # Returning the sectioned reports, if there are, and the name of the image files
+        new_case = internal_functions.Case()
+        new_case.set_problem(new_report=parsed_data[&#39;report&#39;],new_image=parsed_data[&#39;image_files&#39;])
+        report_sectioned = parsed_data[&#39;report&#39;].rstrip().lstrip().split(&#39;\n&#39;)
+        solution = &#34;&#34;
+        if bool({&#39;###FINDINGS&#39;, &#39;###COMPARISON&#39;, &#39;###INDICATION&#39;, &#39;###IMPRESSION&#39;} &amp; set(report_sectioned)):
+            solution = parsed_data[&#39;report&#39;]
+        self.create_new_case(new_case, solution)</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.create_new_case"><code class="name flex">
+<span>def <span class="ident">create_new_case</span></span>(<span>self, new_case, corrected_report='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates and stores a new case.
+If no manual solution is provided, it will be inferred automatically from the system and marked as 'pendant'
+INPUT: Input report [Image_files, Solution files]</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_new_case(self, new_case, corrected_report=&#34;&#34;):
+    &#34;&#34;&#34;Creates and stores a new case.
+    If no manual solution is provided, it will be inferred automatically from the system and marked as &#39;pendant&#39;
+    INPUT: Input report [Image_files, Solution files]&#34;&#34;&#34;
+    if corrected_report:
+        new_sections = corrected_report
+    else:
+        new_sections = internal_functions.section_text(new_case.get_problem().get_report())
+    new_abbvs = internal_functions.disambiguate_abbreviation(new_case.get_solution().get_section_report())
+    new_ner = internal_functions.get_entities(new_case.get_problem().get_report(),
+                                              new_case.get_problem().get_term_list())
+    new_case.get_problem().set_term_list(new_ner)
+    new_case.set_solution(new_sections=new_sections, new_abbvs=new_abbvs)
+    im_vectors = []
+    if new_case.get_problem().get_image_file():
+        for i in new_case.get_problem().get_image_file():
+            im_vectors.append(internal_functions.image_feature_extraction(i))
+            remote_name = i.split(&#39;/&#39;)[-1]
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, i, remote_name,
+                            extension=&#39;image&#39;)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, None, i,
+                             extension=&#39;image&#39;)
+            new_case.get_problem().set_image_files([os.path.join(self.originals_host + &#39;/images/&#39;, remote_name)])
+            os.remove(i)
+    abbs = internal_functions.get_abbr_ratio(new_case.get_problem().get_report(),
+                                             new_case.get_problem().get_abbrs())
+    similar_cases = self.find_top_cases(new_case, {&#39;n&#39;: 3})
+    new_case.get_solution().set_related_cases(similar_cases)
+    df = pd.read_pickle(self.get_csv_path())
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                        self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                         self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+    else:
+        _save_obj(new_case, self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+
+    if self.remote_server:
+        new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_originals_host(), im_vectors,
+                   internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                   new_ner, abbs, &#39;Pendant&#39;,
+                   datetime.datetime.utcnow(), datetime.datetime.utcnow(), self.get_remote_server()[&#39;username&#39;]]
+    else:
+        new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_originals_host(), im_vectors,
+                   internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                   new_ner, abbs, &#39;Pendant&#39;,
+                   datetime.datetime.utcnow(), datetime.datetime.utcnow()]
+    df.loc[len(df)] = new_row
+    df.to_pickle(self.get_csv_path())
+    if self.remote_server:
+        _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.download_image"><code class="name flex">
+<span>def <span class="ident">download_image</span></span>(<span>self, image_file)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Downloads the required image file from the server, if there is, and stores it into the tmp folder
+INPUT: Name of the image file to download.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_image(self,image_file):
+    &#34;&#34;&#34;Downloads the required image file from the server, if there is, and stores it into the tmp folder
+    INPUT: Name of the image file to download.&#34;&#34;&#34;
+    if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+        _ftp_download(self.get_remote_server(), self.get_originals_host()+&#39;/images/&#39;
+                                   , image_file, extension=&#39;image&#39;)
+    elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+        _sftp_download(self.get_remote_server(), self.get_originals_host()+&#39;/images/&#39;,
+                                    image_file, extension=&#39;image&#39;)</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.dump_case"><code class="name flex">
+<span>def <span class="ident">dump_case</span></span>(<span>self, new_case)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Stores a created case in the system and adds its corresponding entry into the case index
+INPUT: Case to dump</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dump_case(self, new_case):
+    &#34;&#34;&#34;Stores a created case in the system and adds its corresponding entry into the case index
+    INPUT: Case to dump&#34;&#34;&#34;
+    df = pd.read_pickle(self.get_csv_path())
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                        self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_upload(self.get_remote_server(), self.get_case_host(), new_case,
+                         self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+    else:
+        _save_obj(new_case, self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)))
+    im_vectors = []
+    if new_case.get_problem().get_image_file():
+        for i in new_case.get_problem().get_image_file():
+            im_vectors.append(internal_functions.image_feature_extraction(i))
+            remote_name = i.split(&#39;/&#39;)[-1]
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                _ftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, i, remote_name,
+                            extension=&#39;image&#39;)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                _sftp_upload(self.get_remote_server(), self.get_originals_host() + &#39;/images/&#39;, None, i,
+                             extension=&#39;image&#39;)
+            new_case.get_problem().set_image_files([os.path.join(self.originals_host + &#39;/images/&#39;, remote_name)])
+            os.remove(i)
+    abbs = internal_functions.get_abbr_ratio(new_case.get_solution().get_section_report())
+    if self.remote_server:
+        new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_originals_host(), im_vectors,
+                   internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                   new_case.get_problem().get_term_list(), abbs, &#39;Pendant&#39;,
+                   datetime.datetime.utcnow(), datetime.datetime.utcnow(), self.get_remote_server()[&#39;username&#39;]]
+    else:
+        new_row = [self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_case_host() + &#39;/&#39; + self.get_case_prefix() + &#39;-&#39; + str(len(df)),
+                   self.get_originals_host(), im_vectors,
+                   internal_functions.get_document_embedding(new_case.get_solution().get_section_report()),
+                   new_case.get_problem().get_term_list(), abbs, &#39;Pendant&#39;,
+                   datetime.datetime.utcnow(), datetime.datetime.utcnow()]
+    df.loc[len(df)] = new_row
+    df.to_pickle(self.get_csv_path())
+    if self.remote_server:
+        _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.find_top_cases"><code class="name flex">
+<span>def <span class="ident">find_top_cases</span></span>(<span>self, case, input_criteria=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Finds the most similar N cases to a given case according to the provided criteria
+INPUT: Present case, [Search criteria (If no input criteria is provided, the default values are used)]
+OUTPUT: Dictionary with the retrieved cases and their metrics with respect to the present case</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_top_cases(self, case, input_criteria=None):
+    &#34;&#34;&#34;Finds the most similar N cases to a given case according to the provided criteria
+    INPUT: Present case, [Search criteria (If no input criteria is provided, the default values are used)]
+    OUTPUT: Dictionary with the retrieved cases and their metrics with respect to the present case&#34;&#34;&#34;
+    if input_criteria is None:
+        criteria = {&#39;i1&#39;: -1, &#39;i2&#39;: -1, &#39;i3&#39;: [], &#39;i4&#39;: -1, &#39;n&#39;: -1, &#39;query_type&#39;: &#39;or&#39;, &#39;discarded_cases&#39;: []}
+    else:
+        default_criteria = {&#39;i1&#39;: -1, &#39;i2&#39;: -1, &#39;i3&#39;: [], &#39;i4&#39;: -1, &#39;n&#39;: -1, &#39;query_type&#39;: &#39;or&#39;,
+                            &#39;discarded_cases&#39;: []}
+        criteria = default_criteria.copy()
+        criteria.update(input_criteria)
+
+    i1_value = case.get_problem().get_image_file()
+    roi_value = case.get_problem().get_roi_coordinates()
+    i2_value = case.get_problem().get_report()
+    i3_value = case.get_problem().get_term_list()
+    case_im_embeddings = []
+    for i in i1_value:
+        case_im_embeddings.append(internal_functions.image_feature_extraction(i, roi=roi_value))
+    case_doc_embedding = internal_functions.get_document_embedding(i2_value)
+    case_terms = internal_functions.get_entities(i2_value, i3_value)
+    if not case_terms:
+        case_terms = {&#34;Empty&#34;: &#34;empty&#34;}
+    df = pd.read_pickle(self.case_index_path)
+    potential_cases = []
+    if not criteria[&#39;discarded_cases&#39;]:
+        case_list = df
+    else:
+        case_list = df[(~df.Case_ID.isin(criteria[&#39;discarded_cases&#39;]))]
+    for i, row in case_list.iterrows():
+        if row[&#39;Validation_Status&#39;] == &#39;Rejected&#39;:
+            continue
+        metrics = {&#39;i1&#39;: 1, &#39;i2&#39;: 1, &#39;i3&#39;: [], &#39;i4&#39;: 1}
+        i1_case = row[&#39;Image_Features&#39;]
+        i2_case = row[&#39;Doc_Embedding&#39;]
+        i3_case = row[&#39;NE_Detected&#39;]
+        i4_case = row[&#39;Abbrv_#&#39;]
+        # First, we compare the images
+        if i1_value:
+            metrics[&#39;i1&#39;] = np.mean([1 - spatial.distance.cosine(i_case, i_potential) for (i_case, i_potential) in
+                                     itertools.product(i1_case, case_im_embeddings)])
+        metrics[&#39;i2&#39;] = 1 - spatial.distance.cosine(np.array(case_doc_embedding), np.array(i2_case))
+        metrics[&#39;i3&#39;] = list(set(i3_case.keys()) &amp; set(case_terms.keys()))
+        if not metrics[&#39;i3&#39;]:
+            metrics[&#39;i3&#39;] = [&#34;&#34;]
+        metrics[&#39;i4&#39;] = i4_case
+        # Then, we check if the conditions are joint or disjoint
+        if criteria[&#39;query_type&#39;] == &#39;and&#39;:
+            if metrics[&#39;i1&#39;] &gt;= criteria[&#39;i1&#39;] and metrics[&#39;i2&#39;] &gt;= criteria[&#39;i2&#39;] and \
+                    len(metrics[&#39;i3&#39;]) &gt;= len(criteria[&#39;i3&#39;]) and metrics[&#39;i4&#39;] &gt;= criteria[&#39;i4&#39;]:
+                metrics[&#39;total&#39;] = np.mean(
+                    [np.mean(metrics[&#39;i1&#39;]), metrics[&#39;i2&#39;], float(len(metrics[&#39;i3&#39;]) / len(case_terms.keys())),
+                     metrics[&#39;i4&#39;]])
+                metrics[&#39;Case_ID&#39;] = row[&#39;Case_ID&#39;]
+                potential_cases.append(metrics)
+
+        elif criteria[&#39;query_type&#39;] == &#39;or&#39;:
+            if metrics[&#39;i1&#39;] &gt;= criteria[&#39;i1&#39;] or metrics[&#39;i2&#39;] &gt;= criteria[&#39;i2&#39;] or \
+                    metrics[&#39;i3&#39;] or metrics[&#39;i4&#39;] &gt;= criteria[&#39;i4&#39;]:
+                metrics[&#39;total&#39;] = np.mean(
+                    [np.mean(metrics[&#39;i1&#39;]), metrics[&#39;i2&#39;], float(len(metrics[&#39;i3&#39;]) / len(case_terms.keys())),
+                     metrics[&#39;i4&#39;]])
+                metrics[&#39;Case_ID&#39;] = row[&#39;Case_ID&#39;]
+                potential_cases.append(metrics)
+
+    if criteria[&#39;n&#39;] != -1 and criteria[&#39;n&#39;] &lt;= len(potential_cases):
+        newlist = sorted(potential_cases, key=operator.itemgetter(&#39;total&#39;), reverse=True)
+        potential_cases = newlist[:criteria[&#39;n&#39;]]
+
+    return potential_cases</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_case_entities"><code class="name flex">
+<span>def <span class="ident">get_case_entities</span></span>(<span>self, case_ID)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieves the named entities detected within a case
+INPUT: Case_ID
+OUTPUT: Dictionary containing each detected entity and its type</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_case_entities(self, case_ID):
+    &#34;&#34;&#34;Retrieves the named entities detected within a case
+    INPUT: Case_ID
+    OUTPUT: Dictionary containing each detected entity and its type&#34;&#34;&#34;
+    df = pd.read_pickle(self.case_index_path)
+    return df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;NE_Detected&#39;].to_dict()</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_case_host"><code class="name flex">
+<span>def <span class="ident">get_case_host</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_case_host(self):
+    return self.case_host</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_case_prefix"><code class="name flex">
+<span>def <span class="ident">get_case_prefix</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_case_prefix(self):
+    return self.case_prefix</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_csv_path"><code class="name flex">
+<span>def <span class="ident">get_csv_path</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_csv_path(self):
+    return self.case_index_path</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_originals_host"><code class="name flex">
+<span>def <span class="ident">get_originals_host</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_originals_host(self):
+    return self.originals_host</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_remote_case_index"><code class="name flex">
+<span>def <span class="ident">get_remote_case_index</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_remote_case_index(self):
+    return self.remote_case_index</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_remote_server"><code class="name flex">
+<span>def <span class="ident">get_remote_server</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_remote_server(self):
+    return {&#39;server_type&#39;: self.server_type, &#39;server&#39;: self.remote_server,
+            &#39;username&#39;: self.credentials[0], &#39;password&#39;: self.credentials[1]}</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.get_storage_unit"><code class="name flex">
+<span>def <span class="ident">get_storage_unit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_storage_unit(self):
+    return self.case_host, self.originals_host, self.case_prefix, self.case_index_path</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.link_similar_n_cases"><code class="name flex">
+<span>def <span class="ident">link_similar_n_cases</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def link_similar_n_cases(self):
+    df = pd.read_pickle(self.case_index_path)
+    for i, row in df.iterrows():
+        i1 = row[&#39;Image_Features&#39;]
+        matches_i1 = {}
+        for j, j_row in df.iterrows():
+            cum = []
+            for (i_case, i_potential) in itertools.product(i1, j_row[&#39;Image_Features&#39;]):
+                cum.append(1 - spatial.distance.cosine(i_case, i_potential))
+            if cum != []:
+                matches_i1[j] = np.mean(cum)
+            else:
+                matches_i1[j] = 1
+        i2 = row[&#39;Doc_Embedding&#39;]
+        matches_i2 = {j: 1 - spatial.distance.cosine(i2, j_row[&#39;Doc_Embedding&#39;]) for j, j_row in df.iterrows()}
+        i3 = row[&#39;NE_Detected&#39;]
+        matches_i3 = {j: list(set(i3) &amp; set(j_row[&#39;NE_Detected&#39;])) for j, j_row in df.iterrows()}
+        matches_total = {j_row[&#39;Case_ID&#39;]: np.mean([matches_i1[j], matches_i2[j], len(matches_i3[j])]) for j, j_row
+                         in df.iterrows()}
+        sorted_d = sorted(matches_total.items(), key=operator.itemgetter(1), reverse=True)
+        cases_to_input = sorted_d[1:6]
+        cases_to_input = [a_tuple[0] for a_tuple in cases_to_input]
+        self.update_related_cases(row[&#39;Case_ID&#39;], cases_to_input)
+        new_entities = internal_functions.get_case_related_entities(self, cases_to_input)
+        self.update_related_entities(row[&#39;Case_ID&#39;], new_entities)</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.recover_single_case"><code class="name flex">
+<span>def <span class="ident">recover_single_case</span></span>(<span>self, case_ID)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Recovers a single case given its ID
+INPUT: Case_ID
+OUTPUT: The case object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def recover_single_case(self, case_ID):
+    &#34;&#34;&#34;Recovers a single case given its ID
+    INPUT: Case_ID
+    OUTPUT: The case object&#34;&#34;&#34;
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            return _ftp_download(self.get_remote_server(), self.get_case_host(), case_ID)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            return _sftp_download(self.get_remote_server(), self.get_case_host(), case_ID)
+
+    else:
+        return _load_obj(self.case_host + &#39;/&#39; + case_ID)</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.set_remote_server"><code class="name flex">
+<span>def <span class="ident">set_remote_server</span></span>(<span>self, server_type, remote_server, username, password)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_remote_server(self, server_type, remote_server, username, password):
+    self.server_type = server_type
+    self.remote_server = remote_server
+    self.credentials = [username, password]</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.set_storage_unit"><code class="name flex">
+<span>def <span class="ident">set_storage_unit</span></span>(<span>self, case_host, originals_host, case_prefix, case_index_path)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_storage_unit(self, case_host, originals_host, case_prefix, case_index_path):
+    self.case_host = case_host
+    self.case_prefix = case_prefix
+    self.originals_host = originals_host
+    # self.case_index_path=case_index_path
+    if case_index_path.endswith(&#39;.zip&#39;):
+        # If the file exists, we make a local copy, which is uploaded after each operation
+        if self.remote_server:
+            self.remote_case_index = case_index_path
+            case_folder = &#39;/&#39;.join(case_index_path.split(&#39;/&#39;)[:-1])
+            case_file = case_index_path.split(&#39;/&#39;)[-1]
+            if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+                index_file = _ftp_download(self.get_remote_server(), case_folder, case_file, extension=&#39;.zip&#39;)
+            elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+                index_file = _sftp_download(self.get_remote_server(), case_folder, case_file, extension=&#39;.zip&#39;)
+            index_file_name = index_file.name
+            index_file.close()
+            shutil.copy2(index_file_name, &#39;externals/&#39; + case_file)
+            self.case_index_path = &#39;externals/&#39; + case_file
+        else:
+            self.case_index_path = &#39;externals/&#39; + case_index_path
+    else:
+        _create_case_df(&#39;externals/&#39; + case_index_path, True)
+        self.case_index_path = &#39;externals/&#39; + case_index_path
+        self.remote_case_index = self.originals_host + &#39;/&#39; + case_index_path</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.update_related_cases"><code class="name flex">
+<span>def <span class="ident">update_related_cases</span></span>(<span>self, case_ID, new_related)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates the stored related cases of a given case
+INPUT: Case_ID, List of related cases</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_related_cases(self, case_ID, new_related):
+    &#34;&#34;&#34;Updates the stored related cases of a given case
+    INPUT: Case_ID, List of related cases&#34;&#34;&#34;
+    case = self.recover_single_case(case_ID)
+    case.get_solution().set_related_cases(new_related)
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+    else:
+        _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+    df = pd.read_pickle(self.case_index_path)
+    df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+    if self.remote_server:
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+    df.to_pickle(self.case_index_path)
+    if self.remote_server:
+        _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())</code></pre>
+</details>
+</dd>
+<dt id="internal_functions.storage_unit.Storage_Unit.update_related_entities"><code class="name flex">
+<span>def <span class="ident">update_related_entities</span></span>(<span>self, case_ID, new_related)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates the stored related entities of a given case
+INPUT: Case_ID, List of related cases</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_related_entities(self, case_ID, new_related):
+    &#34;&#34;&#34;Updates the stored related entities of a given case
+    INPUT: Case_ID, List of related cases&#34;&#34;&#34;
+    case = self.recover_single_case(case_ID)
+    case.get_solution().set_suggested_ner(new_related)
+    if self.remote_server:
+        if self.get_remote_server()[&#39;server_type&#39;] == &#39;ftp&#39;:
+            _ftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+        elif self.get_remote_server()[&#39;server_type&#39;] == &#39;sftp&#39;:
+            _sftp_upload(self.get_remote_server(), self.get_case_host(), case, case_ID)
+    else:
+        _save_obj(case, self.get_case_host() + &#39;/&#39; + case_ID)
+    df = pd.read_pickle(self.case_index_path)
+    df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Last_Modified&#39;] = datetime.datetime.utcnow()
+    if self.remote_server:
+        df.loc[df[&#39;Case_ID&#39;] == case_ID, &#39;Modified_By&#39;] = self.get_remote_server()[&#39;username&#39;]
+    df.to_pickle(self.case_index_path)
+    if self.remote_server:
+        _sync_case_df(self.get_remote_server(), self.get_csv_path(), self.get_remote_case_index())</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="internal_functions" href="index.html">internal_functions</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="internal_functions.storage_unit.Storage_Unit" href="#internal_functions.storage_unit.Storage_Unit">Storage_Unit</a></code></h4>
+<ul class="">
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.change_case_host" href="#internal_functions.storage_unit.Storage_Unit.change_case_host">change_case_host</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.change_case_solution" href="#internal_functions.storage_unit.Storage_Unit.change_case_solution">change_case_solution</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.change_csv_path" href="#internal_functions.storage_unit.Storage_Unit.change_csv_path">change_csv_path</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.create_case_set" href="#internal_functions.storage_unit.Storage_Unit.create_case_set">create_case_set</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.create_new_case" href="#internal_functions.storage_unit.Storage_Unit.create_new_case">create_new_case</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.download_image" href="#internal_functions.storage_unit.Storage_Unit.download_image">download_image</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.dump_case" href="#internal_functions.storage_unit.Storage_Unit.dump_case">dump_case</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.find_top_cases" href="#internal_functions.storage_unit.Storage_Unit.find_top_cases">find_top_cases</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_case_entities" href="#internal_functions.storage_unit.Storage_Unit.get_case_entities">get_case_entities</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_case_host" href="#internal_functions.storage_unit.Storage_Unit.get_case_host">get_case_host</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_case_prefix" href="#internal_functions.storage_unit.Storage_Unit.get_case_prefix">get_case_prefix</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_csv_path" href="#internal_functions.storage_unit.Storage_Unit.get_csv_path">get_csv_path</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_originals_host" href="#internal_functions.storage_unit.Storage_Unit.get_originals_host">get_originals_host</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_remote_case_index" href="#internal_functions.storage_unit.Storage_Unit.get_remote_case_index">get_remote_case_index</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_remote_server" href="#internal_functions.storage_unit.Storage_Unit.get_remote_server">get_remote_server</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.get_storage_unit" href="#internal_functions.storage_unit.Storage_Unit.get_storage_unit">get_storage_unit</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.link_similar_n_cases" href="#internal_functions.storage_unit.Storage_Unit.link_similar_n_cases">link_similar_n_cases</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.recover_single_case" href="#internal_functions.storage_unit.Storage_Unit.recover_single_case">recover_single_case</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.set_remote_server" href="#internal_functions.storage_unit.Storage_Unit.set_remote_server">set_remote_server</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.set_storage_unit" href="#internal_functions.storage_unit.Storage_Unit.set_storage_unit">set_storage_unit</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.update_related_cases" href="#internal_functions.storage_unit.Storage_Unit.update_related_cases">update_related_cases</a></code></li>
+<li><code><a title="internal_functions.storage_unit.Storage_Unit.update_related_entities" href="#internal_functions.storage_unit.Storage_Unit.update_related_entities">update_related_entities</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

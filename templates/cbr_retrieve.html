@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <title>r.AID.ologist</title>
+    <link rel="stylesheet" href="static/bootstrap.css">
+    <link rel="stylesheet" media="screen" href="static/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+    <script src='http://odyniec.net/projects/imgareaselect/jquery.imgareaselect.pack.js'></script>
+    <script src='http://odyniec.net/projects/imgareaselect/jquery.imgareaselect.dev.js'></script>
+    <link rel="stylesheet" type="text/css" href="http://odyniec.net/projects/imgareaselect/css/imgareaselect-animated.css" />
+    <script>
+    $(window).bind("pageshow", function(event) {
+    $("#pageloader").hide();
+        });
+    </script>
+</head>
+
+<body>
+     <div class="myheader">
+		  <img class="center_image" src="static/images/logo.png" alt=""/>
+	 </div>
+
+    <div id="pageloader">
+        <h3 style="text-align: center;margin-bottom: -100px;margin-top: 150px;">Please wait while we perform some operations</h3>
+       <img class="flex-form-img" src="static/Preloader_3.gif" alt="processing..." />
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('expert_settings')}}">Expert Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('explore_cases') }}">Search Existing Cases</a>
+              </li>
+            </ul>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('exit_stu') }}" style="color:#EF7479">Exit</a>
+                </li>
+            </ul>
+          </div>
+    </nav>
+
+     {% with errors = get_flashed_messages() %}
+        {% if errors %}
+        <div class="alert alert-dismissible alert-danger" style="text-align: center;">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <h4>ERROR!</h4>
+            <p><strong>No region of interest was selected in the image</strong></p>
+            <p>Please, drag and drop in the radiography to select an area</p>
+            </div>
+        {% endif %}
+     {% endwith %}
+         <form action="/cbr_retrieve" method="post" id="cbr_form" enctype="multipart/form-data">
+         <div class="cbr-container">
+         <div class="cbr-left">
+             <div class="form-group">
+              <h4>Your report</h4>
+                 <p>{{ content }}</p>
+            </div>
+             {% if image_src!="" %}
+             <h4>Your radiography</h4>
+                 {% if session['rois'] %}
+             <form action="" method="POST">
+             <div class="form-group">
+             <legend>Select the region of interest in the image</legend>
+             <p>Click and drag to select</p>
+                <img id="radiography" src={{image_src}} width="300px" />
+                <input name="roi_selected_x" id="roi_selected_x"  value="" style="visibility: hidden"/>
+                 <input name="roi_selected_y" id="roi_selected_y"  value="" style="visibility: hidden"/>
+                 <input name="roi_selected_w" id="roi_selected_w" value="" style="visibility: hidden"/>
+                 <input name="roi_selected_h" id="roi_selected_h" value="" style="visibility: hidden"/>
+             </div>
+             </form>
+                     <script type="text/javascript">
+                    $(document).ready(function () {
+                       $('#radiography').imgAreaSelect({
+                        handles: true,
+                        onSelectEnd: function (img, selection) {
+                            var x = document.getElementById("roi_selected_x");
+                            x.setAttribute("value",selection.x1);
+                            var x = document.getElementById("roi_selected_y");
+                            x.setAttribute("value",selection.y1);
+                            var x = document.getElementById("roi_selected_w");
+                            x.setAttribute("value",selection.width);
+                            var x = document.getElementById("roi_selected_h");
+                            x.setAttribute("value",selection.height);
+                        }
+                    });
+                    });
+                    </script>
+                {% else %}
+             <div class="form-group">
+                    <img id="radiography1"  src={{image_src}} width="300px"/>
+             </div>
+                 {% endif %}
+
+             {% endif %}
+         </div>
+             <div class="cbr-right">
+                {% if ners %}
+                    <div class="form-group">
+                 <h4>Select those entities that are relevant to your search</h4>
+                 {% for k,v in ners.items() %}
+                        <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" name="ners" id="{{k}}" value="{{k}}" checked>
+                        <label class="custom-control-label" for="{{k}}">{{ k }} ( {{ v }} )</label>
+                        </div>
+                    {% endfor %}
+                    </div>
+                 {% else %}
+                        <input name="ners" value="" style="visibility: hidden"/>
+                 {% endif %}
+             <div class="form-group">
+             <h4>Search parameters</h4>
+             <fieldset class="form-group">
+                  <label for="i2_id">Percentage of similarity with existing reports</label>
+                 <div class="form-group-image-file">
+                  <input type="range" class="custom-range" name="i2_value_name" id="i2_id" step="5" oninput="i2_output_id.value = i2_id.value">
+                  <output name="i2_output_name" id="i2_output_id">50</output>
+                 </div>
+             </fieldset>
+                 {% if image_src!="" %}
+                 <fieldset class="form-group">
+                  <label for="i1_id">Percentage of similarity with existing radiographies</label>
+                     <div class="form-group-image-file">
+                        <input type="range" class="custom-range" name="i1_value_name" id="i1_id" step="5" oninput="i1_output_id.value = i1_id.value">
+                        <output name="i1_output_name" id="i1_output_id">50</output>
+                     </div>
+                 </fieldset>
+                 {% endif %}
+                 <fieldset class="form-group">
+                  <label for="i4_id">Percentage of identified abbreviations in the report</label>
+                     <div class="form-group-image-file">
+                      <input type="range" class="custom-range" name="i4_value_name" id="i4_id" step="5"  oninput="i4_output_id.value = i4_id.value">
+                      <output name="i4_output_name" id="i4_output_id">50</output>
+                     </div>
+                </fieldset>
+                 <h4>Are this conditions conjunctive?</h4>
+                    <div class="form-group-image-file" style="margin-left: -35px;" align="left">
+                    <div class="custom-control custom-switch" align="left">
+                    <div class="custom-toggle-label">No</div>
+                      <input type="checkbox" class="custom-control-input" name="condition" id="customSwitch1" checked="">
+                      <label class="custom-control-label"for="customSwitch1">Yes</label>
+                    </div>
+                         <script> $('#customSwitch1').change(function(){
+                                     cb = $(this);
+                                     cb.val(cb.prop('checked'));
+                                    });
+                         </script>
+                    </div>
+             </div>
+                     <div class="form-group">
+                         <h4>How many cases you want to retrieve at max?</h4>
+                      <select class="form-control" id="exampleSelect1" name="n_cases">
+                        <option>All</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>10</option>
+
+                      </select>
+                    </div>
+                 <button type="submit" class="btn btn-primary">Search</button>
+             </div>
+     </div>
+         <script>
+             $("#cbr_form").submit(function(event) {
+                    $("#pageloader").show();
+                    $(form).submit();
+                });
+         </script>
+     </form>
+
+<footer>
+<p style="margin-left: 20px;">This framework was developed as part of the AI4EU project. Further documentation can be
+found <a href="static/docs/index.html">here</a> </p>
+    <div class="form-group-image-file" style="margin:20px;">
+  <img alt="Qries" src="static/images/Logo_OEG.gif"
+         width=150"  align="left" style="margin-left:30px;">
+
+	<img alt="Qries" src="https://www.ai4eu.eu/themes/custom/ai4eu/logo.svg"
+		 width=200" align="right" style="margin:20px;margin-left: 65%;">
+        </div>
+</footer>
+</body>
+</html>

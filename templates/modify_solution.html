@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <title>r.AID.ologist</title>
+    <link rel="stylesheet" href="static/bootstrap.css">
+    <link rel="stylesheet" media="screen" href="static/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+    $(window).bind("pageshow", function(event) {
+    $("#pageloader").hide();
+        });
+    </script>
+</head>
+
+<body>
+     <div class="myheader">
+		  <img class="center_image" src="static/images/logo.png" alt=""/>
+	 </div>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <div id="pageloader">
+        <h3 style="text-align: center;margin-bottom: -100px;margin-top: 150px;">Please wait while we perform some operations</h3>
+       <img class="flex-form-img" src="static/Preloader_3.gif" alt="processing..." />
+    </div>
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('expert_settings')}}">Expert Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('explore_cases') }}">Search Existing Cases</a>
+              </li>
+            </ul>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('exit_stu') }}" style="color:#EF7479">Exit</a>
+                </li>
+            </ul>
+          </div>
+    </nav>
+     {% with notifications = get_flashed_messages() %}
+        {% if notifications %}
+        <div class="alert alert-dismissible alert-success">
+              <button type="button" class="close" onclick="GoToHomePage()">&times;</button>
+                <h3 style="text-align:center;">Your case has been saved successfully!</h3>
+        </div>
+        <script type="text/javascript">
+            function GoToHomePage()
+                  {
+                    window.location = '/';
+                  }
+        </script>
+        {% endif %}
+     {% endwith %}
+    <form action="/modify_case" method="post" id="modify_case">
+        <div class="cbr-container">
+            <div class="cbr-left-2">
+            <div class="form-group">
+              <h4>Your sectioned report</h4>
+              <textarea class="form-control" name="modify_report" rows="10" required>{% for k,v in sectioned_report.items() %}
+                  {{k}}&#13;&#10;{{v}}&#13;&#10;
+                  {% endfor %}
+              </textarea>
+            </div>
+            </div>
+            <div class="cbr-right-2">
+                {% if sugg_problems or sugg_treatments or sugg_tests %}
+                    <h5>These are some other terms that usually appear alongside the ones in your report</h5>
+                    <div class="form-group" style="margin-right:10px;">
+                        <p>Click on each type to show suggestions</p>
+                        <div class="form-group-image-file">
+                        {% if sugg_problems %}
+                        <div class="form-group">
+                        <div class="alert alert-light" id="alert_diseases" style="display: none;">
+                          <button type="button" class="close" id="hide_diseases">&times;</button>
+                            {% for i in sugg_problems %}
+                            {{ i }},
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" id="show_diseases">Some related diseases</button>
+                        <script>
+                           $(document).ready(function(){
+                                        $('#show_diseases').click(function(){
+                                            $('#alert_diseases').show();
+                                        });
+                                       $('#hide_diseases').click(function(){
+                                                    $('#alert_diseases').hide();
+                                                });
+                                    });
+                        </script>
+                        </div>
+                        {% endif %}
+                        {% if sugg_treatments %}
+                        <div class="form-group" style="margin-left:10px;margin-right:10px;">
+                        <div class="alert alert-light" id="alert_treat" style="display:none;">
+                          <button type="button" class="close" id="hide_treat">&times;</button>
+                            {% for i in sugg_treatments %}
+                              {{ i }},
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" id="show_treat">Some related treatments</button>
+                        <script>
+                           $(document).ready(function(){
+                                        $('#show_treat').click(function(){
+                                            $('#alert_treat').show();
+                                        });
+                                       $('#hide_treat').click(function(){
+                                                    $('#alert_treat').hide();
+                                                });
+                                    });
+                        </script>
+                        </div>
+                        {% endif %}
+                        {% if sugg_tests %}
+                        <div class="form-group" style="margin-left: 10px;">
+                        <div class="alert alert-light" id="alert_tests" style="display:none;">
+                          <button type="button" class="close" id="hide_tests">&times;</button>
+                            {% for i in sugg_tests %}
+                            {{ i }},
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" id="show_tests">Some related tests</button>
+                        <script>
+                           $(document).ready(function(){
+                                        $('#show_tests').click(function(){
+                                            $('#alert_tests').show();
+                                        });
+                                $('#hide_tests').click(function(){
+                                            $('#alert_tests').hide();
+                                        });
+                                    });
+                        </script>
+                        </div>
+                        {% endif %}
+                        </div>
+                        </div>
+                {% endif %}
+                {% if sugg_abbrv!={} %}
+                <div class="form-group">
+                    <h5>These are some disambiguation suggestions for the detected abbreviations</h5>
+                    <table class="table table-hover">
+                        {% for k,v in sugg_abbrv.items() %}
+                        <tr class="table-light">
+                          <td> {{ k }}</td>
+                          <td><i class="fa fa-arrow-right" style="color:#62c2a7;"></i></td>
+                          <td> {{ v }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+                {% if related_cases %}
+              <h5>These are the detected related cases</h5>
+                <p> Uncheck those boxes associated with cases that you consider unrelated</p>
+             <table class="table table-hover">
+                 {% for c in related_cases %}
+                 <tr class="table-light">
+                     <td> <input type="checkbox" name="selected_cases" id="{{ c['Case_ID'] }}" value="{{ c['Case_ID']  }}" checked></td>
+                     <td><strong>Case ID:</strong> {{ c['Case_ID'] }}</td>
+                     <td>
+                         <div class="mytooltip"><i class="fa fa-question-circle-o" style="color:#15AABF;"></i>
+                             <span class="mytooltiptext" style="font-size:14px;">
+                                 {% set total=c['total']*100 %}
+                                 <p>This case has a total similarity of <strong>{{ '%0.2f' % total|float }}</strong> % with your case.</p>
+                                    {% if c['i1']!=1 %}
+                                        {% set i1_metric = c['i1']*100 %}
+                                 <p>- Its radiographies are <strong>{{ '%0.2f' % i1_metric|float }}</strong> similar to yours</p>
+                                    {% endif %}
+                                    {% set i2_metric = c['i2']*100 %}
+                                 <p>- The report is <strong>{{ '%0.2f' % i2_metric|float }}%</strong> similar to yours</p>
+                                    {% if c['i3']!=[""] %}
+                                    <p>- The following search terms where found in the report
+                                            {% for t in c['i3'] %}
+                                        <strong>{{t}} </strong> /
+                                            {% endfor %}
+                                    </p>
+                                    {% endif %}
+                             </span>
+                        </div>
+                     </td>
+                 </tr>
+                 {% endfor %}
+             </table>
+             {% else %}
+             <p class="text-danger" style="font-size: 25px;">No related cases could be retrieved</p>
+             {% endif %}
+            </div>
+        </div>
+        <div class="buttonHolder" style="margin:20px;">
+        <button type="submit" class="btn btn-primary" >Save changes</button>
+        </div>
+        <script>
+                 $(document).ready(function(){
+                      $("#modify_case").on("submit", function(){
+                        $("#pageloader").fadeIn();
+                      });//submit
+                    });
+             </script>
+        </form>
+<footer>
+<p style="margin-left: 20px;">This framework was developed as part of the AI4EU project. Further documentation can be
+found <a href="static/docs/index.html">here</a> </p>
+    <div class="form-group-image-file" style="margin:20px;">
+  <img alt="Qries" src="static/images/Logo_OEG.gif"
+         width=150"  align="left" style="margin-left:30px;">
+
+	<img alt="Qries" src="https://www.ai4eu.eu/themes/custom/ai4eu/logo.svg"
+		 width=200" align="right" style="margin:20px;margin-left: 65%;">
+        </div>
+</footer>
+</body>
+</html>
