@@ -16,6 +16,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.par
 import internal_functions
 
 
+
 # De momento vamos a centrarnos en local y ya daremos el salto
 
 
@@ -200,7 +201,7 @@ class Storage_Unit:
         self.data_format = ""
         self.case_index_path = ""
         self.remote_server = None
-        self.credentials = None
+        self.credentials = ["",""]
         self.server_type = ""
         self.real_case_index = ""
 
@@ -232,7 +233,7 @@ class Storage_Unit:
                 self.case_index_path = 'externals/' + case_index_path
         else:
             _create_case_df('externals/' + case_index_path, True)
-            self.case_index_path = 'externals/' + case_index_path
+            self.case_index_path = 'externals/' + case_index_path+'.zip'
             self.remote_case_index = self.originals_host + '/' + case_index_path
 
     def change_case_host(self, new_case_host):
@@ -335,8 +336,8 @@ class Storage_Unit:
                 elif self.get_remote_server()['server_type'] == 'sftp':
                     _sftp_upload(self.get_remote_server(), self.get_originals_host() + '/images/', None, i,
                                  extension='image')
-                new_case.get_problem().set_image_files([os.path.join(self.originals_host + '/images/', remote_name)])
-                os.remove(i)
+                # new_case.get_problem().set_image_files([os.path.join(self.originals_host + '/images/', remote_name)])
+                # os.remove(i)
         abbs = internal_functions.get_abbr_ratio(new_case.get_problem().get_report(),
                                                  new_case.get_problem().get_abbrs())
         similar_cases = self.find_top_cases(new_case, {'n': 3})

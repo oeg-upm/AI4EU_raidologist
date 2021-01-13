@@ -4,6 +4,7 @@ class _Solution:
         self.sugg_abbvs = {}
         self.sugg_ner = {}
         self.similar_cases = []
+        self.original_section=""""""
 
     def get_data(self):
         return self.sections, self.sugg_abbvs, self.sugg_ner, self.similar_cases
@@ -13,6 +14,9 @@ class _Solution:
         self.sugg_abbvs = new_abbvs
         self.sugg_ner = new_ner
         self.similar_cases = new_cases
+
+    def set_original_section(self,new_original_section):
+        self.original_section=new_original_section
 
     def set_related_cases(self,new_cases):
         self.similar_cases=new_cases
@@ -38,6 +42,9 @@ class _Solution:
     def get_related_cases(self):
         return self.similar_cases
 
+    def get_original_section(self):
+        return self.original_section
+
 
 class _Problem:
     def __init__(self):
@@ -46,12 +53,20 @@ class _Problem:
         self.roi_coordinates = []
         self.term_list = []
         self.abbrs_employed = {}
+        self.src_lang = 'en'
+        self.original_report = """"""
 
     def get_data(self):
         return self.report, self.image_files, self.roi_coordinates, self.term_list, self.abbrs_employed
 
     def get_report(self):
         return self.report
+
+    def get_src_lang(self):
+        return self.src_lang
+
+    def get_original_report(self):
+        return self.original_report
 
     def get_image_file(self):
         return self.image_files
@@ -71,6 +86,10 @@ class _Problem:
         self.roi_coordinates = new_rois
         self.term_list = new_terms
         self.abbrs_employed = new_abbrs
+
+    def set_lang_data(self,new_lang, new_original_report):
+        self.src_lang=new_lang
+        self.original_report=new_original_report
 
     def set_report(self,new_report):
         self.report=new_report
