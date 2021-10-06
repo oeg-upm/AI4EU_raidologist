@@ -112,8 +112,8 @@ class Case:
         self.problem = _Problem()
         self.solution = _Solution()
 
-    def set_problem(self, new_report="""""", new_image=[], new_rois=[], new_terms=[], new_abbrs={}):
-        self.problem.set_data(new_report, new_image, new_rois, new_terms, new_abbrs)
+    def set_problem(self, new_report="""""", new_image=[], new_rois=[], new_terms=[], new_abbrs={}, new_lang=''):
+        self.problem.set_data(new_report, new_image, new_rois, new_terms, new_abbrs,new_lang)
 
     def get_problem(self):
         return self.problem
