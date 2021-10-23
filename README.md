@@ -36,7 +36,10 @@ The framework has been developed using Python 3.7. To locally run the framework,
  3. Install the spacy model
  `python -m spacy download en_core_web_sm`
  
- 4. Execute the *main.py* file 
+ 4. Download the NER model and place it the directory *externals/i2b2*
+`curl -O https://drive.upm.es/s/gOXyNxXgnrDBIEj/download`
+
+ 5. Execute the *main.py* file 
 `python main.py`
 
  6. Go to the direction localhost:5000 in your web browser to start using the framework
