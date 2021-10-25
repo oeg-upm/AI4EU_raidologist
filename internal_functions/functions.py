@@ -29,8 +29,8 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
-import internal_functions
 
+import internal_functions
 
 def _save_obj(obj, name):
     with open(name + '.pkl', 'wb') as f:
@@ -288,36 +288,37 @@ def get_entities(text, named_entities=None, prefix=''):
     """Detects the existing named entities within the text. Entities are stored in lowercase format to enable string comparison
     INPUT: Textual data, [Recognized named entities]
     OUTPUT: Returns a dictionary with the identified named entities and their type"""
-    # Cat text into a file
-    ner_file = prefix + 'externals/tmp/report_ner.txt'
-    with open(ner_file, 'w+') as txt_file:
-        txt_file.write(text)
-    txt_file.close()
-    # Call CliNER
-    os.system(
-        'python ' + prefix + 'externals/CliNER/cliner predict --txt ' + prefix +
-        'externals/tmp/report_ner.txt --out ' + prefix + 'externals/tmp --model ' + prefix + 'externals/CliNER/models/silver.crf --format i2b2')
-    os.remove(ner_file)
-    # Parse output
+    nermodel = internal_functions.NERModel('raidologist_ner', 'externals/i2b2')  ## path to the model folder
+    if not nermodel.initialized:
+        nermodel.initModel()
+
+    result = nermodel.predict(text)
+    # # Cat text into a file
+
+    tokens = result[0]
+
+    labels = result[1]
+
+    res_parsed = nermodel.parse_result(tokens, labels)
+
     found_entities = {}
-    p1 = re.compile('c="([^"]*)"')
-    p2 = re.compile('t="([^"]*)"')
-    output_ner = prefix + 'externals/tmp/report_ner.con'
-    with open(output_ner, 'r') as ner_file:
-        for line in ner_file:
-            if line != '\n':
-                c = p1.findall(line)[0]
-                t = p2.findall(line)[0]
-                found_entities[c.lower()] = t
-    os.remove(output_ner)
-    if named_entities:
-        cat_ner = {}
-        for ne in named_entities:
-            cat = _query_SNOMED(ne, query_type='entity_type')
-            if cat != 'N/A':
-                cat_ner[ne.lower()] = cat
-        found_entities = {**found_entities, **cat_ner}
+
+    for res in res_parsed:
+        if 'test' in res[1]:
+            found_entities[res[0]] = 'test'
+        if 'treatment' in res[1]:
+            found_entities[res[0]] = 'treatment'
+        if 'problem' in res[1]:
+            found_entities[res[0]] = 'problem'
     return found_entities
+    # if named_entities:
+    #     cat_ner = {}
+    #     for ne in named_entities:
+    #         cat = _query_SNOMED(ne, query_type='entity_type')
+    #         if cat != 'N/A':
+    #             cat_ner[ne.lower()] = cat
+    #     found_entities = {**found_entities, **cat_ner}
+    # return found_entities
 
 
 # INDICATOR 4: Abbreviatures

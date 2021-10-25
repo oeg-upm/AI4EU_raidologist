@@ -1,11 +1,9 @@
 import sys
 import os
-import googletrans
-
 from googletrans import Translator
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 import internal_functions
-translator=Translator()
+translator = Translator(service_urls=['translate.googleapis.com'])
 
 #Stages of the CBR Cycle:
 def init_cbr(data):
@@ -25,7 +23,7 @@ def init_cbr(data):
         new_case.get_problem().set_lang_data(new_lang=lang,new_original_report=data['report'])
     else:
         new_case.set_problem(new_report=data['report'],new_image=data['images'],new_terms=data['ne_terms']
-                         ,new_abbrs=data['abbrvs'],new_lang=lang)
+                         ,new_abbrs=data['abbrvs'])
     return new_case
 
 def cbr_retrieval(st,new_case,query):
